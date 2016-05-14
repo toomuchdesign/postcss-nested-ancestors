@@ -1,0 +1,34 @@
+{
+  "name": "postcss-nested-grandpa",
+  "version": "0.0.0",
+  "description": "PostCSS plugin to reference grandparent selectors in nested CSS",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "grandparent",
+    "selector",
+    "postcss-nested"
+  ],
+  "author": "Andrea Carraro <me@andreacarraro.it>",
+  "license": "MIT",
+  "repository": "toomuchdesign/postcss-nested-grandpa",
+  "bugs": {
+    "url": "https://github.com/toomuchdesign/postcss-nested-grandpa/issues"
+  },
+  "homepage": "https://github.com/toomuchdesign/postcss-nested-grandpa",
+  "dependencies": {
+    "postcss": "^5.0.21"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "eslint": "^2.10.0",
+    "eslint-config-postcss": "^2.0.2"
+  },
+  "scripts": {
+    "test": "ava && eslint *.js"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-postcss/es5"
+  }
+}
