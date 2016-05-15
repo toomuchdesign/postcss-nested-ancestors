@@ -13,7 +13,7 @@ function run(t, input, output, opts = { }) {
 
 test('Chain placeholder in a simple case', t => {
     return run( t,
-                '.a{ &:hover{ %-b{} } }',
+                '.a{ &:hover{ ^&-b{} } }',
                 '.a{ &:hover{ .a-b{} } }',
                 { }
     );
@@ -21,56 +21,41 @@ test('Chain placeholder in a simple case', t => {
 
 test('Prepend placeholder in a simple case', t => {
     return run( t,
-                '.a{ &:hover{ % .b{} } }',
+                '.a{ &:hover{ ^& .b{} } }',
                 '.a{ &:hover{ .a .b{} } }',
-                { }
-    );
-});
-
-test('Chain 1 placeholder in double selector', t => {
-    return run( t,
-                '.a{ &:hover{ %-b, .c{} } }',
-                '.a{ &:hover{ .a-b, .c{} } }',
-                { }
-    );
-});
-
-test('Chain 1 placeholder in double selector', t => {
-    return run( t,
-                '.a{ &:hover{ %.b, .c{} } }',
-                '.a{ &:hover{ .a.b, .c{} } }',
-                { }
-    );
-});
-
-test('Prepend 1 placeholder in double selector', t => {
-    return run( t,
-                '.a{ &:hover{ % .b, .c{} } }',
-                '.a{ &:hover{ .a .b, .c{} } }',
                 { }
     );
 });
 
 test('Chain 2 placeholders in double selector', t => {
     return run( t,
-                '.a{ &:hover{ color: red; %-b, %-c{} } .z{ color: blue;} }',
-                '.a{ &:hover{ color: red; .a-b, .a-c{} } .z{ color: blue;} }',
+                '.a{ &:hover{ ^&-b, ^&-c{} } }',
+                '.a{ &:hover{ .a-b, .a-c{} } }',
                 { }
     );
 });
 
 test('Prepend 2 placeholders in double selector', t => {
     return run( t,
-                '.a{ &:hover{ color: red; % .b, % .c{} } .z{ color: blue;} }',
-                '.a{ &:hover{ color: red; .a .b, .a .c{} } .z{ color: blue;} }',
+                '.a{ &:hover{ ^& .b, ^& .c{} } }',
+                '.a{ &:hover{ .a .b, .a .c{} } }',
                 { }
     );
 });
 
 test('Replace placeholder at different nesting levels', t => {
     return run( t,
-                '.a{ &:hover{ %-b{} } .c{ .d{ %-e{} } } .z{} }',
+                '.a{ &:hover{ ^&-b{} } .c{ .d{ ^&-e{} } } .z{} }',
                 '.a{ &:hover{ .a-b{} } .c{ .d{ .a .c-e{} } } .z{} }',
                 { }
     );
 });
+
+test('Use placeholder with 3 different parent levels', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ^&-d,^&-d{} ^^&-d{} ^^^&-d{}} } }',
+                '.a{ &-b{ &-c{ .a-b-d,.a-b-d{} .a-d{} -d{}} } }',
+                { }
+    );
+});
+

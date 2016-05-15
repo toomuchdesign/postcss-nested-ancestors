@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/toomuchdesign/postcss-nested-grandpa",
   "dependencies": {
+    "escape-string-regexp": "^1.0.5",
+    "object-assign": "^4.1.0",
     "postcss": "^5.0.21"
   },
   "devDependencies": {
