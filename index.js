@@ -16,10 +16,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     var parentsStack = [],
         placeholderRegex = new RegExp(
             /*
-             * Get all parent placeholder recurrencies:
+             * Get all ancestors placeholder recurrencies:
              * ^&, ^^&, ^^^&, [...]
-             *
-             * default regex: "^+&"
              */
             escpRegex(opts.levelSymbol) + '+' + escpRegex(opts.parentSymbol),
             'g'
@@ -28,10 +26,10 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     /*
      * getParentSelectorAtLevel()
      *
-     * Assemble current parent selector.
+     * Assembly current ancestor selector.
      *
-     * nestingLevel param make it possible to select
-     * an higher parent up into parents hierarchy
+     * nestingLevel param allows to select
+     * an higher element up into ancestors hierarchy
      *
      * eg.
      * nestingLevel = 0 is direct parent (same of "&")
@@ -71,7 +69,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
             if (rule.type === 'rule') {
 
                 // Add current parent selector to current parent stack
-                if (rule.parent.selector) {
+                if (rule.parent.type === 'rule') {
                     parentsStack.push(rule.parent.selector);
                 }
 

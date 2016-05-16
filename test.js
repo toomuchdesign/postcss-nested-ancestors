@@ -83,4 +83,3 @@ test('Return empty string when pointing to a non-existent ancestor', t => {
     );
 });
 
-
