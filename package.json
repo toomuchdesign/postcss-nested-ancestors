@@ -1,22 +1,23 @@
 {
-  "name": "postcss-nested-grandpa",
+  "name": "postcss-nested-ancestors",
   "version": "0.0.0",
-  "description": "PostCSS plugin to reference grandparent selectors in nested CSS",
+  "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
   "keywords": [
     "postcss",
     "css",
     "postcss-plugin",
+    "ancestor",
     "grandparent",
     "selector",
     "postcss-nested"
   ],
   "author": "Andrea Carraro <me@andreacarraro.it>",
   "license": "MIT",
-  "repository": "toomuchdesign/postcss-nested-grandpa",
+  "repository": "toomuchdesign/postcss-nested-ancestors",
   "bugs": {
-    "url": "https://github.com/toomuchdesign/postcss-nested-grandpa/issues"
+    "url": "https://github.com/toomuchdesign/postcss-nested-ancestors/issues"
   },
-  "homepage": "https://github.com/toomuchdesign/postcss-nested-grandpa",
+  "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
     "object-assign": "^4.1.0",
