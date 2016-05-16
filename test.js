@@ -11,7 +11,7 @@ function run(t, input, output, opts = { }) {
         });
 }
 
-test('Chain placeholder in a simple case', t => {
+test('Chain ancestor in a simple case', t => {
     return run( t,
                 '.a{ &:hover{ ^&-b{} } }',
                 '.a{ &:hover{ .a-b{} } }',
@@ -19,7 +19,7 @@ test('Chain placeholder in a simple case', t => {
     );
 });
 
-test('Prepend placeholder in a simple case', t => {
+test('Prepend ancestor in a simple case', t => {
     return run( t,
                 '.a{ &:hover{ ^& .b{} } }',
                 '.a{ &:hover{ .a .b{} } }',
@@ -27,7 +27,7 @@ test('Prepend placeholder in a simple case', t => {
     );
 });
 
-test('Chain 2 placeholders in double selector', t => {
+test('Chain 2 ancestors in double selector', t => {
     return run( t,
                 '.a{ &:hover{ ^&-b, ^&-c{} } }',
                 '.a{ &:hover{ .a-b, .a-c{} } }',
@@ -35,7 +35,7 @@ test('Chain 2 placeholders in double selector', t => {
     );
 });
 
-test('Prepend 2 placeholders in double selector', t => {
+test('Prepend 2 ancestors in double selector', t => {
     return run( t,
                 '.a{ &:hover{ ^& .b, ^& .c{} } }',
                 '.a{ &:hover{ .a .b, .a .c{} } }',
@@ -43,7 +43,7 @@ test('Prepend 2 placeholders in double selector', t => {
     );
 });
 
-test('Replace placeholder at different nesting levels', t => {
+test('Replace ancestors at different nesting levels', t => {
     return run( t,
                 '.a{ &:hover{ ^&-b{} } .c{ .d{ ^&-e{} } } .z{} }',
                 '.a{ &:hover{ .a-b{} } .c{ .d{ .a .c-e{} } } .z{} }',
@@ -51,11 +51,28 @@ test('Replace placeholder at different nesting levels', t => {
     );
 });
 
-test('Use placeholder with 3 different parent levels', t => {
+test('Replace ancestors with 3 different hierarchy levels', t => {
     return run( t,
                 '.a{ &-b{ &-c{ ^&-d,^&-d{} ^^&-d{} ^^^&-d{}} } }',
                 '.a{ &-b{ &-c{ .a-b-d,.a-b-d{} .a-d{} -d{}} } }',
                 { }
     );
 });
+
+test('Process 2 nested ancestors', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ^^&-d{ &-e{ ^^^^&-f{ } } } } } }',
+                '.a{ &-b{ &-c{ .a-d{ &-e{ .a-f{ } } } } } }',
+                { }
+    );
+});
+
+test('Return empty string when pointing to a non-existent ancestor', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ^^^^&-d{} } } }',
+                '.a{ &-b{ &-c{ -d{} } } }',
+                { }
+    );
+});
+
 
