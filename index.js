@@ -2,7 +2,7 @@ var postcss = require('postcss'),
     assign = require('object-assign'),
     escpRegex = require('escape-string-regexp');
 
-module.exports = postcss.plugin('postcss-nested-grandpa', function (opts) {
+module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     opts = assign({
         placeholder: '^&'
     }, opts);
@@ -41,6 +41,8 @@ module.exports = postcss.plugin('postcss-nested-grandpa', function (opts) {
     function getParentSelectorAtLevel(nestingLevel) {
         nestingLevel = nestingLevel || 1;
 
+        // @TODO add warning when nestingLevel >= parentsStack.length
+
         return parentsStack.filter( function (rule, index) {
             return index < parentsStack.length - nestingLevel;
         })
@@ -48,7 +50,7 @@ module.exports = postcss.plugin('postcss-nested-grandpa', function (opts) {
             .replace(/\s&/g, '');   // Remove empty spaces before "&"
     }
 
-    function placeholderToParentSelector(placeholder) {
+    function placeholderReplacer(placeholder) {
         return getParentSelectorAtLevel(
             // Get how many levels ("^") has current placeholder
             placeholder.split(opts.levelSymbol).length - 1
@@ -59,7 +61,7 @@ module.exports = postcss.plugin('postcss-nested-grandpa', function (opts) {
         // Find placeholders and replace them with matching parent selector
         return selector.replace(
             placeholderRegex,
-            placeholderToParentSelector
+            placeholderReplacer
         );
     }
 
@@ -72,12 +74,6 @@ module.exports = postcss.plugin('postcss-nested-grandpa', function (opts) {
                 if (rule.parent.selector) {
                     parentsStack.push(rule.parent.selector);
                 }
-
-                // @TODO remove logs
-                // console.log('rule.selector', rule.selector);
-                // console.log('parentsStack', parentsStack);
-                // console.log('getParSelsAtLevel', getParentSelectorAtLevel());
-                // console.log('-----');
 
                 // Replace parents placeholders in rule selctor
                 rule.selectors = rule.selectors.map(replacePlaceholders);
