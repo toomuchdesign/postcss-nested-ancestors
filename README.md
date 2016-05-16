@@ -13,40 +13,38 @@ $ npm install postcss-nested-ancestor
 ```
 
 ## Usage
+When writing modular nested CSS, It often arises the need of building a child selector using an ancestor selector different then the last one.
+
+This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-nested](https://github.com/postcss/postcss-nested).
+
+See [PostCSS] docs for examples for your environment.
 
 ```css
+
 /* Before */
 .foo
     &:hover {
-        ^&-bar {
-            color: inherit;
-        }
+        > ^&-bar {}   /* no :hover inherited here! */
     }
 }
 
 /* After postcss-nested-ancestors */
 .foo {
     &:hover {
-        .foo-bar { /* no :hover inherited here! */
-            color: inherit;
-        }
+        > .foo-bar {} /* no :hover inherited here! */
     }
 }
 
 /* After postcss-nested */
 .foo {}
 .foo:hover {}
-.foo .foo-bar { /* no :hover inherited here! */
-    color: inherit;
-}
+.foo:hover > .foo-bar {}    /* no :hover inherited here! */
+
 ```
 
-## Usage
-
-**This plugin should be used just **before** POSTCSS rules unwrapper like [postcss-nested](https://github.com/postcss/postcss-nested).
-
-See [PostCSS] docs for examples for your environment.
-
+## Why?
+**postcss-current-ancestors** solves the problem of
+[postcss-current-selector](https://github.com/komlev/postcss-current-selector)
 
 ## Options
 
