@@ -67,6 +67,14 @@ test('Process 2 nested ancestors', t => {
     );
 });
 
+test('Process nested ancestor near to > \, + and ~ selectors', t => {
+    return run( t,
+                '.a{ &-b{ > ^&-c{} + ^&-d{} ~ ^&-e{} } }',
+                '.a{ &-b{ > .a-c{} + .a-d{} ~ .a-e{} } }',
+                { }
+    );
+});
+
 test('Return empty string when pointing to a non-existent ancestor', t => {
     return run( t,
                 '.a{ &-b{ &-c{ ^^^^&-d{} } } }',
