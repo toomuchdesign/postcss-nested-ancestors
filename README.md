@@ -2,9 +2,12 @@
 
 [PostCSS] plugin to reference any ancestor selector in nested CSS.
 
-[PostCSS]: https://github.com/postcss/postcss
-[ci-img]:  https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg
-[ci]:      https://travis-ci.org/toomuchdesign/postcss-nested-ancestors
+[PostCSS]:                      https://github.com/postcss/postcss
+[ci-img]:                       https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg
+[ci]:                           https://travis-ci.org/toomuchdesign/postcss-nested-ancestors
+[postcss-current-selector]:     https://github.com/komlev/postcss-current-selector
+[postcss-nested]:               https://github.com/postcss/postcss-nested
+[postcss-simple-vars]:          https://github.com/postcss/postcss-simple-vars
 
 ## Installation
 
@@ -17,7 +20,7 @@ When writing modular nested CSS, `&` current parent selector is often not enough
 
 **PostCSS Nested ancestors** introduce `^&` selector which let you reference **any parent ancestor selector** with an easy and customizable interface.
 
-This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-nested](https://github.com/postcss/postcss-nested).
+This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-nested].
 
 See [PostCSS] docs for examples for your environment.
 
@@ -101,3 +104,6 @@ Type: `string`
 Default: `&`
 
 Ancestor selector base symbol
+
+## Todo's
+- Add warning when nestingLevel >= parentsStack.length
