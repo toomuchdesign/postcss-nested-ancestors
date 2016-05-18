@@ -9,13 +9,7 @@
 [postcss-nested]:               https://github.com/postcss/postcss-nested
 [postcss-simple-vars]:          https://github.com/postcss/postcss-simple-vars
 
-## Installation
-
-```console
-$ npm install postcss-nested-ancestors
-```
-
-## Usage
+## Getting ancestor selectors
 When writing modular nested CSS, `&` current parent selector is often not enough.
 
 **PostCSS Nested ancestors** introduce `^&` selector which let you reference **any parent ancestor selector** with an easy and customizable interface.
@@ -24,7 +18,7 @@ This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-ne
 
 See [PostCSS] docs for examples for your environment.
 
-### Ancestor selector schema
+### Ancestor selectors schema
 
 ```
     .level-1 {
@@ -81,6 +75,18 @@ See [PostCSS] docs for examples for your environment.
 Currently another plugin - [postcss-current-selector] - has tried to solve the problem of referencing ancestors selector. It works great, but its approach involves assigning ancestor selectors to special variables to be later processed by a further postcss plugin [postcss-simple-vars].
 
 [postcss-nested-ancestors] instead replaces special ancestor selectors, makes no use of variable assignment and produces an output ready to be unwrapped with [postcss-nested].
+
+## Installation
+
+```console
+$ npm install postcss-nested-ancestors
+```
+
+## Usage
+
+```js
+postcss([ require('postcss-nested-ancestors') ]);
+```
 
 ## Options
 
