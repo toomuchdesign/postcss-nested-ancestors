@@ -1,6 +1,6 @@
 var postcss = require('postcss'),
     assign = require('object-assign'),
-    escpRegex = require('escape-string-regexp');
+    escRgx = require('escape-string-regexp');
 
 module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     opts = assign({
@@ -9,8 +9,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
     // Advanced options
     opts = assign({
-        levelSymbol: opts.placeholder.charAt(0),   /* default "^" */
-        parentSymbol: opts.placeholder.charAt(1)   /* default "&" */
+        levelSymbol: opts.levelSymbol || opts.placeholder.charAt(0),
+        parentSymbol: opts.parentSymbol || opts.placeholder.charAt(1)
     }, opts);
 
     var parentsStack = [],
@@ -19,7 +19,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
              * Get all ancestors placeholder recurrencies:
              * ^&, ^^&, ^^^&, [...]
              */
-            escpRegex(opts.levelSymbol) + '+' + escpRegex(opts.parentSymbol),
+            // eslint-disable-next-line max-len
+            '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
             'g'
         );
 

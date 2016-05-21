@@ -83,3 +83,18 @@ test('Return empty string when pointing to a non-existent ancestor', t => {
     );
 });
 
+test('Replace default ancestor selector with \"£%\"', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ££%-d{ &-e{ ££££%-f{ } } } } } }',
+                '.a{ &-b{ &-c{ .a-d{ &-e{ .a-f{ } } } } } }',
+                { placeholder: '£%' }
+    );
+});
+
+test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ foofoobar-d{ foofoofoobar-f{ } } } } }',
+                '.a{ &-b{ &-c{ .a-d{ .a-f{ } } } } }',
+                { levelSymbol: 'foo', parentSymbol: 'bar' }
+    );
+});
