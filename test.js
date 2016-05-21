@@ -85,8 +85,8 @@ test('Return empty string when pointing to a non-existent ancestor', t => {
 
 test('Replace default ancestor selector with \"£%\"', t => {
     return run( t,
-                '.a{ &-b{ &-c{ ££%-d{ &-e{ ££££%-f{ } } } } } }',
-                '.a{ &-b{ &-c{ .a-d{ &-e{ .a-f{ } } } } } }',
+                '.a{ &-b{ &-c{ ££%-d{ £££%-f{ } } } } }',
+                '.a{ &-b{ &-c{ .a-d{ .a-f{ } } } } }',
                 { placeholder: '£%' }
     );
 });
