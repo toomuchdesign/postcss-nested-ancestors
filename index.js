@@ -5,7 +5,8 @@ var postcss = require('postcss'),
 module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     opts = assign({
         placeholder: '^&',
-        replaceValues: false
+        replaceValues: false,
+        pseudoClasses: false
     }, opts);
 
     // Advanced options
@@ -34,6 +35,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      */
     function getParentSelectorAtLevel(nestingLevel) {
         nestingLevel = nestingLevel || 1;
+
+        if (opts.pseudoClasses) nestingLevel -= 1
 
         // @TODO add warning when nestingLevel >= parentsStack.length
 
