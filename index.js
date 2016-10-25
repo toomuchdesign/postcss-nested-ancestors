@@ -87,13 +87,15 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                 rule.selectors = rule.selectors.map(replacePlaceholders);
 
                 if (opts.replaceValues) {
-                    rule.nodes.forEach(function (node) {
-                        if (node.type === 'decl') {
-                            if (node.value.indexOf(opts.placeholder) >= 0) {
-                                node.value = replacePlaceholders(node.value);
+                    rule.nodes.forEach(function (ruleNode) {
+                        if (ruleNode.type === 'decl') {
+                            if (ruleNode.value.indexOf(opts.placeholder) >= 0) {
+                                ruleNode.value = replacePlaceholders(
+                                    ruleNode.value
+                                );
                             }
                         }
-                    })
+                    });
                 }
 
                 // Process child rules
