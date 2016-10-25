@@ -148,5 +148,12 @@ i.e.
 }
 ```
 
+### pseudoClasses
+
+Type `boolean`
+Default: `false`
+
+If this is true then pseudo classes (`&:hover`, `&:focus`) are included in the parent chain
+
 ## Todo's
 - Add warning when nestingLevel >= parentsStack.length
