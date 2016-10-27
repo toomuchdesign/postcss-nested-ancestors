@@ -15,15 +15,14 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     }, opts);
 
     var parentsStack = [],
+        // Get all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
         placeholderRegex = new RegExp(
-            /**
-             * Get all ancestors placeholder recurrencies:
-             * ^&, ^^&, ^^^&, [...]
-             */
             // eslint-disable-next-line max-len
             '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
             'g'
-        );
+        ),
+        // Get any space preceding an ampersand
+        spacesAndAmpersandRegex = /\s&/g;
 
     /**
      * Walk current ancestor stack and
@@ -41,7 +40,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
             return index < parentsStack.length - nestingLevel;
         })
             .join(' ')
-            .replace(/\s&/g, '');   // Remove empty spaces before "&"
+            .replace(spacesAndAmpersandRegex, '');  // Remove " &"
     }
 
     /**
