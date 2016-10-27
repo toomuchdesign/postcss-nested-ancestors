@@ -43,6 +43,22 @@ test('Prepend 2 ancestors in double selector', t => {
     );
 });
 
+test('Replace with root comment', t => {
+    return run( t,
+                '/* This is a comment */ .a{ &:hover{ ^& .b, ^& .c{} } }',
+                '/* This is a comment */ .a{ &:hover{ .a .b, .a .c{} } }',
+                { }
+    );
+});
+
+test('Replace with nested comment', t => {
+    return run( t,
+                '.a{ &:hover{ /* This is a comment */ ^& .b, ^& .c{} } }',
+                '.a{ &:hover{ /* This is a comment */ .a .b, .a .c{} } }',
+                { }
+    );
+});
+
 test('Replace declaration values if replaceValues is true', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^&"; } } }',
