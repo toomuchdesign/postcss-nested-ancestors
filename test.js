@@ -83,10 +83,10 @@ test('Replace ancestors at different nesting levels', t => {
     );
 });
 
-test('Replace ancestors with 3 different hierarchy levels', t => {
+test('Replace ancestors with 4 different hierarchy levels', t => {
     return run( t,
-                '.a{ &-b{ &-c{ ^&-d,^&-d{} ^^&-d{} ^^^&-d{}} } }',
-                '.a{ &-b{ &-c{ .a-b-d,.a-b-d{} .a-d{} -d{}} } }',
+                '.a{ &-b{ &-c{ &-d{} ^&-d,^&-d{} ^^&-d{} ^^^&-d{}} } }',
+                '.a{ &-b{ &-c{ &-d{} .a-b-d,.a-b-d{} .a-d{} -d{}} } }',
                 { }
     );
 });
