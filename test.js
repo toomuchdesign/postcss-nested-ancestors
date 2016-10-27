@@ -130,3 +130,11 @@ test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
                 { levelSymbol: 'foo', parentSymbol: 'bar' }
     );
 });
+
+test.failing('Complex nesting: ancestors with multiple selectors', t => {
+    return run( t,
+                '.a,.b{ &:after{ ^&-c{} } }',
+                '.a,.b{ &:after{ .a-c,.b-c{} } }',
+                { }
+    );
+});

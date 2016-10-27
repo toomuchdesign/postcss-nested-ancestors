@@ -121,31 +121,51 @@ If this is true then this plugin will look through your declaration values/prope
 i.e.
 
 ```css
+/* Before */
 .foo {
-    background-color: red;
-
     &:hover {
-        background-color: blue;
-
-        &::before {
+        &:before {
             content: '^&';
         }
     }
 }
-```
 
-```
+/* After PostCSS Nested ancestors and PostCSS Nested */
 .foo {
-  background-color: red;
 }
 
 .foo:hover {
- background-color: blue;
 }
 
 .foo:hover:before {
- content: '.foo';
+    content: '.foo';
 }
+```
+
+## Known issues
+
+### Complex nesting
+**PostCSS Nested ancestors** is currently not able to resolve complex nesting cases like multiple selector declarations. It might break badly.
+
+```css
+/* Before */
+.foo,
+.bar {
+    &:hover {
+        ^&-moo {
+        }
+    }
+}
+
+/* After :-( */
+.foo,
+.bar {
+    &:hover {
+        .foo,.bar-moo {
+        }
+    }
+}
+
 ```
 
 ## Todo's
