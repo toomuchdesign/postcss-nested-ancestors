@@ -5,8 +5,7 @@ var postcss = require('postcss'),
 module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     opts = assign({
         placeholder: '^&',
-        replaceValues: false,
-        pseudoClasses: false
+        replaceDeclarations: false
     }, opts);
 
     // Advanced options
@@ -35,8 +34,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      */
     function getParentSelectorAtLevel(nestingLevel) {
         nestingLevel = nestingLevel || 1;
-
-        if (opts.pseudoClasses) nestingLevel -= 1;
 
         // @TODO add warning when nestingLevel >= parentsStack.length
 
@@ -78,33 +75,24 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
     var process = function (node) {
         node.each( function (rule) {
-
             if (rule.type === 'rule') {
 
-                // Add current parent selector to current parent stack
-                if (rule.parent.type === 'rule') {
-                    parentsStack.push(rule.parent.selector);
-                }
-
-                // Replace parents placeholders in rule selector
+                // Replace parents placeholders in rule selectors
                 rule.selectors = rule.selectors.map(replacePlaceholders);
 
-                if (opts.replaceValues) {
-                    rule.nodes.forEach(function (ruleNode) {
-                        if (ruleNode.type === 'decl') {
-                            if (ruleNode.value.indexOf(opts.placeholder) >= 0) {
-                                ruleNode.value = replacePlaceholders(
-                                    ruleNode.value
-                                );
-                            }
-                        }
-                    });
-                }
+                // Add current selector to current parent stack
+                parentsStack.push(rule.selector);
 
                 // Process child rules
                 process(rule);
             }
 
+            // Optionally replace parents placeholders into declarations
+            // eslint-disable-next-line brace-style
+            else if (opts.replaceDeclarations && rule.type === 'decl') {
+                rule.value = replacePlaceholders(rule.value);
+                rule.prop = replacePlaceholders(rule.prop);
+            }
         });
         // Remove current parent stack item at the end of each child iteration
         parentsStack.pop();

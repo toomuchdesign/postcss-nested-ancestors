@@ -62,16 +62,16 @@ test('Replace with nested comment', t => {
 test('Replace declaration values if replaceValues is true', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^&"; } } }',
-                '.a{ &:hover { &:before { content: ".a"; } } }',
-                { replaceValues: true }
+                '.a{ &:hover { &:before { content: ".a:hover"; } } }',
+                { replaceDeclarations: true }
     );
 });
 
-test('Take into account pseudo classes if pseudoClasses is true', t => {
+test('Replace declaration values if replaceDeclarations is true', t => {
     return run( t,
-                '.a{ &:hover { &:before { content: "^&"; } } }',
-                '.a{ &:hover { &:before { content: ".a:hover"; } } }',
-                { replaceValues: true, pseudoClasses: true }
+                '.a{ &:hover { &:before { content: "^^&"; } } }',
+                '.a{ &:hover { &:before { content: ".a"; } } }',
+                { replaceDeclarations: true }
     );
 });
 

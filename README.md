@@ -111,12 +111,12 @@ Default: `&`
 
 Ancestor selector base symbol
 
-### replaceValues
+### replaceDeclarations
 
 Type `boolean`
 Default: `false`
 
-If this is true then this plugin will look through your declaration values for the placeholder symbol and replace them with the desired selector.
+If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with the desired selector.
 
 i.e.
 
@@ -143,17 +143,10 @@ i.e.
  background-color: blue;
 }
 
-.foo:hover::before {
- content: '.foo'
+.foo:hover:before {
+ content: '.foo';
 }
 ```
-
-### pseudoClasses
-
-Type `boolean`
-Default: `false`
-
-If this is true then pseudo classes (`&:hover`, `&:focus`) are included in the parent chain
 
 ## Todo's
 - Add warning when nestingLevel >= parentsStack.length
