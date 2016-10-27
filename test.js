@@ -43,6 +43,24 @@ test('Prepend 2 ancestors in double selector', t => {
     );
 });
 
+test('Replace declaration values if replaceValues is true', t => {
+    return run( t,
+                '.a{ background: red; &:hover {&::before { content: "^&"; }}}',
+                '.a{ background: red; &:hover {&::before { content: ".a"; }}}',
+                { replaceValues: true }
+    );
+});
+
+test('Take into account pseudo classes if pseudoClasses is true', t => {
+    return run( t,
+                '.a{ background: red; &:hover {&::before ' +
+                '{ content: "^&"; }}}',
+                '.a{ background: red; &:hover {&::before ' +
+                '{ content: ".a:hover"; }}}',
+                { replaceValues: true, pseudoClasses: true }
+    );
+});
+
 test('Replace ancestors at different nesting levels', t => {
     return run( t,
                 '.a{ &:hover{ ^&-b{} } .c{ .d{ ^&-e{} } } .z{} }',

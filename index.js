@@ -4,7 +4,9 @@ var postcss = require('postcss'),
 
 module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     opts = assign({
-        placeholder: '^&'
+        placeholder: '^&',
+        replaceValues: false,
+        pseudoClasses: false
     }, opts);
 
     // Advanced options
@@ -33,6 +35,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      */
     function getParentSelectorAtLevel(nestingLevel) {
         nestingLevel = nestingLevel || 1;
+
+        if (opts.pseudoClasses) nestingLevel -= 1;
 
         // @TODO add warning when nestingLevel >= parentsStack.length
 
@@ -84,6 +88,18 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
                 // Replace parents placeholders in rule selector
                 rule.selectors = rule.selectors.map(replacePlaceholders);
+
+                if (opts.replaceValues) {
+                    rule.nodes.forEach(function (ruleNode) {
+                        if (ruleNode.type === 'decl') {
+                            if (ruleNode.value.indexOf(opts.placeholder) >= 0) {
+                                ruleNode.value = replacePlaceholders(
+                                    ruleNode.value
+                                );
+                            }
+                        }
+                    });
+                }
 
                 // Process child rules
                 process(rule);
