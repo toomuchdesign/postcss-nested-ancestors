@@ -118,8 +118,6 @@ Default: `false`
 
 If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with the desired selector.
 
-i.e.
-
 ```css
 /* Before */
 .foo {
