@@ -45,18 +45,16 @@ test('Prepend 2 ancestors in double selector', t => {
 
 test('Replace declaration values if replaceValues is true', t => {
     return run( t,
-                '.a{ background: red; &:hover {&::before { content: "^&"; }}}',
-                '.a{ background: red; &:hover {&::before { content: ".a"; }}}',
+                '.a{ &:hover { &:before { content: "^&"; } } }',
+                '.a{ &:hover { &:before { content: ".a"; } } }',
                 { replaceValues: true }
     );
 });
 
 test('Take into account pseudo classes if pseudoClasses is true', t => {
     return run( t,
-                '.a{ background: red; &:hover {&::before ' +
-                '{ content: "^&"; }}}',
-                '.a{ background: red; &:hover {&::before ' +
-                '{ content: ".a:hover"; }}}',
+                '.a{ &:hover { &:before { content: "^&"; } } }',
+                '.a{ &:hover { &:before { content: ".a:hover"; } } }',
                 { replaceValues: true, pseudoClasses: true }
     );
 });
@@ -85,7 +83,7 @@ test('Process 2 nested ancestors', t => {
     );
 });
 
-test('Process nested ancestor near to > \, + and ~ selectors', t => {
+test('Process nested ancestor close to > \, + and ~ selectors', t => {
     return run( t,
                 '.a{ &-b{ > ^&-c{} + ^&-d{} ~ ^&-e{} } }',
                 '.a{ &-b{ > .a-c{} + .a-d{} ~ .a-e{} } }',
