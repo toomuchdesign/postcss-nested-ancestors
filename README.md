@@ -116,15 +116,15 @@ Ancestor selector base symbol
 Type: `boolean`
 Default: `false`
 
-If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with the desired selector.
+If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with the specified selector.
+
+An use case for this if enabling [postcss-ref](https://github.com/morishitter/postcss-ref) to work with dynamic `@ref` selectors. Read discussion [here](https://github.com/toomuchdesign/postcss-nested-ancestors/pull/3).
 
 ```css
 /* Before */
 .foo {
-    &:hover {
-        &:before {
-            content: '^&';
-        }
+    &:last-child {
+        border-top: ref(^&, border-bottom);
     }
 }
 
@@ -132,11 +132,8 @@ If this is true then this plugin will look through your declaration values/prope
 .foo {
 }
 
-.foo:hover {
-}
-
-.foo:hover:before {
-    content: '.foo';
+.foo:last-child {
+    border-top: ref(.foo, border-bottom);
 }
 ```
 
