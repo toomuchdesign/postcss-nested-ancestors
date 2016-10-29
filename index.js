@@ -28,7 +28,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * Walk current ancestor stack and
      * assembly ancestor selector at the given depth.
      *
-     * @param  {Number} ancestor nesting depth ( 0 = &, 1 = grandparent, ...)
+     * @param  {Number} ancestor nesting depth (0 = &, 1 = ^& = grandparent...)
      * @return {String} ancestor selector
      */
     function getParentSelectorAtLevel(nestingLevel) {
@@ -36,6 +36,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
         // @TODO add warning when nestingLevel >= parentsStack.length
 
+        // Create an array of matching parent selectors
         return parentsStack.filter( function (rule, index) {
             return index < parentsStack.length - nestingLevel;
         })
@@ -77,7 +78,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
             if (rule.type === 'rule') {
 
                 // Replace parents placeholders in rule selectors
-                rule.selectors = rule.selectors.map(replacePlaceholders);
+                rule.selector = replacePlaceholders(rule.selector);
 
                 // Add current selector to current parent stack
                 parentsStack.push(rule.selector);
