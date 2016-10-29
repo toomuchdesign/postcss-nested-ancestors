@@ -116,7 +116,7 @@ Ancestor selector base symbol
 Type: `boolean`
 Default: `false`
 
-If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with the specified selector.
+If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with specified selector.
 
 An use case for this if enabling [postcss-ref](https://github.com/morishitter/postcss-ref) to work with dynamic `@ref` selectors. Read discussion [here](https://github.com/toomuchdesign/postcss-nested-ancestors/pull/3).
 
