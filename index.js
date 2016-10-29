@@ -22,7 +22,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
             'g'
         ),
         // Get any space preceding an ampersand
-        spacesAndAmpersandRegex = /\s&/g;
+        spacesAndAmpersandRegex = /\s&/g,
+        resultReference;
 
     /**
      * Walk current ancestor stack and
@@ -35,6 +36,9 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         nestingLevel = nestingLevel || 1;
 
         // @TODO add warning when nestingLevel >= parentsStack.length
+        if ( nestingLevel >= parentsStack.length ) {
+            resultReference.warn('Parent selector exceeds current stack.');
+        }
 
         // Create an array of matching parent selectors
         return parentsStack.filter( function (rule, index) {
@@ -97,5 +101,9 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         // Remove current parent stack item at the end of each child iteration
         parentsStack.pop();
     };
-    return process;
+
+    return function (root, result) {
+        resultReference = result;   // Store global reference to result object
+        process(root, result);
+    };
 });

@@ -3,11 +3,11 @@ import test    from 'ava';
 
 import plugin from './';
 
-function run(t, input, output, opts = { }) {
+function run(t, input, output, opts = { }, warnings = 0) {
     return postcss([ plugin(opts) ]).process(input)
         .then( result => {
             t.deepEqual(result.css, output);
-            t.deepEqual(result.warnings().length, 0);
+            t.deepEqual(result.warnings().length, warnings);
         });
 }
 
@@ -83,11 +83,12 @@ test('Replace ancestors at different nesting levels', t => {
     );
 });
 
-test('Replace ancestors with 4 different hierarchy levels', t => {
+test('Replace ancestors with 4 different hierarchy levels (1 exceeding)', t => {
     return run( t,
-                '.a{ &-b{ &-c{ &-d{} ^&-d,^&-d{} ^^&-d{} ^^^&-d{}} } }',
-                '.a{ &-b{ &-c{ &-d{} .a-b-d,.a-b-d{} .a-d{} -d{}} } }',
-                { }
+                '.a{ &-b{ &-c{ &-d{} ^&-d,^&-d{} ^^&-d{} ^^^&-d{} } } }',
+                '.a{ &-b{ &-c{ &-d{} .a-b-d,.a-b-d{} .a-d{} -d{} } } }',
+                { },
+                1
     );
 });
 
@@ -111,7 +112,8 @@ test('Return empty string when pointing to a non-existent ancestor', t => {
     return run( t,
                 '.a{ &-b{ &-c{ ^^^^&-d{} } } }',
                 '.a{ &-b{ &-c{ -d{} } } }',
-                { }
+                { },
+                1
     );
 });
 
