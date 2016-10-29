@@ -164,4 +164,4 @@ An use case for this if enabling [postcss-ref](https://github.com/morishitter/po
 ```
 
 ## Todo's
-- Add warning when nestingLevel >= parentsStack.length
+...

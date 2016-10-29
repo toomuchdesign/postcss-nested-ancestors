@@ -1,5 +1,6 @@
 ## 0.1.0
 * Add experimental `replaceDeclarations` option, to process declaration props and values, too
+* Cast warning when nestingLevel >= parentsStack.length
 * Move `spacesAndAmpersandRegex` regex into a reusable regex
 * Add a failing test case documenting issues when complex nesting
 
