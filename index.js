@@ -15,15 +15,16 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     }, opts);
 
     var parentsStack = [],
+
         // Get all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
         placeholderRegex = new RegExp(
             // eslint-disable-next-line max-len
             '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
             'g'
         ),
+
         // Get any space preceding an ampersand
-        spacesAndAmpersandRegex = /\s&/g,
-        resultReference;
+        spacesAndAmpersandRegex = /\s&/g;
 
     /**
      * Walk current ancestor stack and
@@ -32,16 +33,16 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @param  {Number} ancestor nesting depth (0 = &, 1 = ^& = grandparent...)
      * @return {String} ancestor selector
      */
-    function getParentSelectorAtLevel(nestingLevel) {
+    function getParentSelectorAtLevel(nestingLevel, rule, result) {
         nestingLevel = nestingLevel || 1;
 
-        // @TODO add warning when nestingLevel >= parentsStack.length
+        // Set a warning when nestingLevel >= parentsStack.length
         if ( nestingLevel >= parentsStack.length ) {
-            resultReference.warn('Parent selector exceeds current stack.');
+            rule.warn(result, 'Parent selector exceeds current stack.');
         }
 
         // Create an array of matching parent selectors
-        return parentsStack.filter( function (rule, index) {
+        return parentsStack.filter( function (selector, index) {
             return index < parentsStack.length - nestingLevel;
         })
             .join(' ')
@@ -56,10 +57,13 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @param  {String} placeholder eg.^^&
      * @return {String} string      ancestor selector fragment
      */
-    function placeholderReplacer(placeholder) {
+    function placeholderReplacer(placeholder, rule, result) {
         return getParentSelectorAtLevel(
+
             // Get how many level symbols ("^") has current placeholder
-            placeholder.split(opts.levelSymbol).length - 1
+            placeholder.split(opts.levelSymbol).length - 1,
+            rule,
+            result
         );
     }
 
@@ -69,41 +73,44 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @param  {String} selector
      * @return {String} selector
      */
-    function replacePlaceholders(selector) {
+    function replacePlaceholders(selector, rule, result) {
+
         // Find placeholders and replace them with matching parent selector
         return selector.replace(
             placeholderRegex,
-            placeholderReplacer
+            function (placeholder) {
+                return placeholderReplacer(placeholder, rule, result);
+            }
         );
     }
 
-    var process = function (node) {
+    var process = function (node, result) {
         node.each( function (rule) {
             if (rule.type === 'rule') {
 
                 // Replace parents placeholders in rule selectors
-                rule.selector = replacePlaceholders(rule.selector);
+                rule.selector = replacePlaceholders(rule.selector, rule, result);
 
                 // Add current selector to current parent stack
                 parentsStack.push(rule.selector);
 
                 // Process child rules
-                process(rule);
+                process(rule, result);
             }
 
             // Optionally replace parents placeholders into declarations
             // eslint-disable-next-line brace-style
             else if (opts.replaceDeclarations && rule.type === 'decl') {
-                rule.value = replacePlaceholders(rule.value);
-                rule.prop = replacePlaceholders(rule.prop);
+                rule.value = replacePlaceholders(rule.value, rule, result);
+                rule.prop = replacePlaceholders(rule.prop, rule, result);
             }
         });
+
         // Remove current parent stack item at the end of each child iteration
         parentsStack.pop();
     };
 
     return function (root, result) {
-        resultReference = result;   // Store global reference to result object
         process(root, result);
     };
 });
