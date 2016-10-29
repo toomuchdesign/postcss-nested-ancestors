@@ -31,6 +31,8 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * assembly ancestor selector at the given depth.
      *
      * @param  {Number} ancestor nesting depth (0 = &, 1 = ^& = grandparent...)
+     * @param  {Object} a PostCSS Rule object
+     * @param  {Object} a PostCSS Result object
      * @return {String} ancestor selector
      */
     function getParentSelectorAtLevel(nestingLevel, rule, result) {
@@ -54,7 +56,9 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * returns the corresponding selector fragment.
      * Used as replacer in .replace method
      *
-     * @param  {String} placeholder eg.^^&
+     * @param  {String} placeholder (eg.^^&)
+     * @param  {Object} a PostCSS Rule object
+     * @param  {Object} a PostCSS Result object
      * @return {String} string      ancestor selector fragment
      */
     function placeholderReplacer(placeholder, rule, result) {
@@ -68,9 +72,11 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     }
 
     /**
-     * Replace any ancestor placeholder into a given selector.
+     * Replace any ancestor placeholder into a given selector/string.
      *
-     * @param  {String} selector
+     * @param  {String} CSS selector / string
+     * @param  {Object} a PostCSS Rule object
+     * @param  {Object} a PostCSS Result object
      * @return {String} selector
      */
     function replacePlaceholders(selector, rule, result) {
