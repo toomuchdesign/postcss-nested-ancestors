@@ -35,6 +35,9 @@
     "postversion": "git push && git push --tags"
   },
   "eslintConfig": {
-    "extends": "eslint-config-postcss/es5"
+    "extends": "eslint-config-postcss/es5",
+    "rules": {
+      "max-len": ["error", 90]
+    }
   }
 }
