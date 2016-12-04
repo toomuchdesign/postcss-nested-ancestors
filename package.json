@@ -31,7 +31,7 @@
   "scripts": {
     "build": "babel --out-dir=dist index.js",
     "test": "nyc ava --reporter=lcov",
-    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
+    "report-coverage": "nyc ava --reporter=lcov > coverage.lcov && codecov",
     "preversion": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags"
@@ -46,12 +46,8 @@
     }
   },
   "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-runtime"
-    ],
+    "presets": ["es2015"],
+    "plugins": ["transform-runtime"],
     "ignore": "test.js",
     "env": {
       "development": {
@@ -61,12 +57,5 @@
   },
   "ava": {
 	"require": ["babel-core/register"]
-  },
-  "nyc": {
-	"include": ["./test.js"],
-    "reporter": [
-	  "lcov",
-	  "text-summary"
-    ],
   }
 }
