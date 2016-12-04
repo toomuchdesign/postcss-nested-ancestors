@@ -1,11 +1,16 @@
 var postcss = require('postcss'),
 	escRgx = require('escape-string-regexp');
 
-module.exports = postcss.plugin('postcss-nested-ancestors', opts => {
+module.exports = postcss.plugin('postcss-nested-ancestors', (opts = {}) => {
 	opts = Object.assign({
-		levelSymbol: opts.levelSymbol || '^',
-		parentSymbol: opts.parentSymbol || '&',
-		placeholder: '^&'
+		placeholder: '^&',
+		replaceDeclarations: false
+	}, opts);
+
+	// Advanced options
+	opts = Object.assign({
+		levelSymbol: opts.levelSymbol || opts.placeholder.charAt(0),
+		parentSymbol: opts.parentSymbol || opts.placeholder.charAt(1)
 	}, opts);
 
 	var parentStack = [],
