@@ -1,5 +1,7 @@
 # PostCSS Nested Selectors
 [![Build Status](https://travis-ci.org/nathanhood/postcss-nested-selectors.svg?branch=master)](https://travis-ci.org/nathanhood/postcss-nested-selectors)
+[![codecov](https://codecov.io/gh/nathanhood/postcss-nested-selectors/branch/master/graph/badge.svg)](https://codecov.io/gh/nathanhood/postcss-nested-selectors)
+
 
 **Note:** This is a fork of [postcss-nested-selectors](https://github.com/nathanhood/postcss-nested-selectors).
 
