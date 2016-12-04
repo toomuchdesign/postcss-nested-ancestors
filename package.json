@@ -1,35 +1,37 @@
 {
-  "name": "postcss-nested-ancestors",
+  "name": "postcss-nested-selectors",
   "version": "0.1.0",
-  "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
+  "description": "PostCSS plugin to reference ancestor selectors",
   "keywords": [
     "postcss",
     "css",
     "postcss-plugin",
     "ancestor",
-    "grandparent",
     "selector",
     "postcss-nested"
   ],
-  "author": "Andrea Carraro <me@andreacarraro.it>",
+  "author": "Nathan Hood",
   "license": "MIT",
-  "repository": "toomuchdesign/postcss-nested-ancestors",
+  "repository": "nathanhood/postcss-nested-ancestors",
   "bugs": {
-    "url": "https://github.com/toomuchdesign/postcss-nested-ancestors/issues"
+    "url": "https://github.com/nathanhood/postcss-nested-ancestors/issues"
   },
-  "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
+  "homepage": "https://github.com/nathanhood/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
-    "object-assign": "^4.1.0",
     "postcss": "^5.0.21"
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "babel-cli": "^6.18.0",
     "eslint": "^2.10.0",
-    "eslint-config-postcss": "^2.0.2"
+    "eslint-config-postcss": "^2.0.2",
+    "nyc": "^10.0.0"
   },
   "scripts": {
-    "test": "ava && eslint *.js",
+    "build": "babel --out-dir=dist index.js",
+    "test": "nyc ava --reporter=lcov",
+    "report-coverage": "nyc ava --reporter=lcov > coverage.lcov && codecov",
     "preversion": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags"
@@ -42,5 +44,18 @@
         90
       ]
     }
+  },
+  "babel": {
+    "presets": ["es2015"],
+    "plugins": ["transform-runtime"],
+    "ignore": "test.js",
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      }
+    }
+  },
+  "ava": {
+	"require": ["babel-core/register"]
   }
 }

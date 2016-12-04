@@ -1,8 +1,9 @@
 language: node_js
 node_js:
   - "6"
-  - "4"
-  - "0.12"
-notifications:
-  email:
-    on_success: change
+install:
+  - npm install
+  - npm install -g codecov
+script:
+  - npm run build
+  - npm run report-coverage
