@@ -5,5 +5,4 @@ install:
   - npm install
   - npm install -g codecov
 script:
-  - npm test
   - npm run report-coverage
