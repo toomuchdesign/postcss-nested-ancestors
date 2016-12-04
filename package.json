@@ -7,11 +7,10 @@
     "css",
     "postcss-plugin",
     "ancestor",
-    "grandparent",
     "selector",
     "postcss-nested"
   ],
-  "author": "Andrea Carraro <me@andreacarraro.it>",
+  "author": "Nathan Hood",
   "license": "MIT",
   "repository": "toomuchdesign/postcss-nested-ancestors",
   "bugs": {
@@ -20,7 +19,6 @@
   "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
-    "object-assign": "^4.1.0",
     "postcss": "^5.0.21"
   },
   "devDependencies": {
@@ -29,7 +27,7 @@
     "eslint-config-postcss": "^2.0.2"
   },
   "scripts": {
-    "test": "ava && eslint *.js",
+    "test": "ava",
     "preversion": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags"
