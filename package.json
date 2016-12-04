@@ -12,11 +12,11 @@
   ],
   "author": "Nathan Hood",
   "license": "MIT",
-  "repository": "toomuchdesign/postcss-nested-ancestors",
+  "repository": "nathanhood/postcss-nested-ancestors",
   "bugs": {
-    "url": "https://github.com/toomuchdesign/postcss-nested-ancestors/issues"
+    "url": "https://github.com/nathanhood/postcss-nested-ancestors/issues"
   },
-  "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
+  "homepage": "https://github.com/nathanhood/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
     "postcss": "^5.0.21"
