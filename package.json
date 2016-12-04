@@ -61,5 +61,12 @@
   },
   "ava": {
 	"require": ["babel-core/register"]
+  },
+  "nyc": {
+	"include": ["./test.js"],
+    "reporter": [
+	  "lcov",
+	  "text-summary"
+    ],
   }
 }
