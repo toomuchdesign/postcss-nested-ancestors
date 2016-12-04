@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "babel --out-dir=dist index.js",
-    "test": "nyc ava --reporter=text-lcov",
+    "test": "nyc ava --reporter=lcov",
     "report-coverage": "npm test > coverage.lcov && codecov",
     "preversion": "npm test",
     "version": "git add package.json",
