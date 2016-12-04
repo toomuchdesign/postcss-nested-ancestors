@@ -65,7 +65,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         return getParentSelectorAtLevel(
 
             // Get how many level symbols ("^") has current placeholder
-            placeholder.split(opts.levelSymbol).length - 1,
+            placeholder.lastIndexOf(opts.levelSymbol) / opts.levelSymbol.length  + 1,
             rule,
             result
         );
