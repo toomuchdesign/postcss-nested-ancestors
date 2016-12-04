@@ -1,6 +1,6 @@
-# PostCSS Nested ancestors
+# PostCSS Nested Selectors
 
-**Note:** This is a fork of [postcss-nested-ancestors](https://github.com/toomuchdesign/postcss-nested-ancestors).
+**Note:** This is a fork of [postcss-nested-selectors](https://github.com/nathanhood/postcss-nested-selectors).
 
 [PostCSS] plugin to reference any ancestor selector in nested CSS.
 
@@ -12,7 +12,7 @@
 ## Getting ancestor selectors
 When writing modular nested CSS, `&` current parent selector is often not enough.
 
-**PostCSS Nested ancestors** introduces `^&` selector which let you reference **any parent ancestor selector** with an easy and customizable interface.
+**PostCSS Nested Selectors** introduces `^&` selector which let you reference **any parent ancestor selector** with an easy and customizable interface.
 
 This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-nested].
 
@@ -40,7 +40,7 @@ See [PostCSS] docs for examples for your environment.
 ### A real example
 
 ```css
-/* Without postcss-nested-ancestors */
+/* Without postcss-nested-selectors */
 .MyComponent
 	&-part{}
 	&:hover {
@@ -48,7 +48,7 @@ See [PostCSS] docs for examples for your environment.
 	}
 }
 
-/* With postcss-nested-ancestors */
+/* With postcss-nested-selectors */
 .MyComponent
 	&-part{}
 	&:hover {
@@ -56,7 +56,7 @@ See [PostCSS] docs for examples for your environment.
 	}
 }
 
-/* After postcss-nested-ancestors */
+/* After postcss-nested-selectors */
 .MyComponent {
 	&-part{}
 	&:hover {
@@ -74,18 +74,18 @@ See [PostCSS] docs for examples for your environment.
 ## Why?
 Currently another plugin - [postcss-current-selector] - has tried to solve the problem of referencing ancestors selector. It works great, but its approach involves assigning ancestor selectors to special variables to be later processed by a further postcss plugin [postcss-simple-vars].
 
-**PostCSS Nested ancestors** instead replaces special ancestor selectors, makes no use of variable assignment and produces an output ready to be unwrapped with [postcss-nested].
+**PostCSS Nested Selectors** instead replaces special ancestor selectors, makes no use of variable assignment and produces an output ready to be unwrapped with [postcss-nested].
 
 ## Installation
 
 ```console
-$ npm install postcss-nested-ancestors
+$ npm install postcss-nested-selectors
 ```
 
 ## Usage
 
 ```js
-postcss([ require('postcss-nested-ancestors') ]);
+postcss([ require('postcss-nested-selectors') ]);
 ```
 
 ## Options
