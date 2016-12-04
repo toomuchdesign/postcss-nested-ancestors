@@ -1,7 +1,7 @@
 {
-  "name": "postcss-nested-ancestors",
+  "name": "postcss-nested-selectors",
   "version": "0.1.0",
-  "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
+  "description": "PostCSS plugin to reference ancestor selectors",
   "keywords": [
     "postcss",
     "css",
