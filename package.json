@@ -29,7 +29,9 @@
     "eslint-config-postcss": "^2.0.2"
   },
   "scripts": {
-    "test": "ava && eslint *.js",
+    "test": "npm run tests && npm run lint",
+    "tests": "ava",
+    "lint": "eslint *.js",
     "preversion": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags"
