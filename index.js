@@ -1,4 +1,5 @@
 var postcss = require('postcss'),
+    resolvedNestedSelector = require('postcss-resolve-nested-selector'),
     assign = require('object-assign'),
     escRgx = require('escape-string-regexp');
 
@@ -14,69 +15,91 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         parentSymbol: opts.parentSymbol || opts.placeholder.charAt(1)
     }, opts);
 
-    var parentsStack = [],
-
         // Get all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
-        placeholderRegex = new RegExp(
+    var placeholderRegex = new RegExp(
             // eslint-disable-next-line max-len
             '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
             'g'
-        ),
-
-        // Get any space preceding an ampersand
-        spacesAndAmpersandRegex = /\s&/g;
+        );
 
     /**
-     * Walk current ancestor stack and
-     * assembly ancestor selector at the given depth.
-     *
-     * @param  {Number} ancestor nesting depth (0 = &, 1 = ^& = grandparent...)
-     * @param  {Object} a PostCSS Rule object
-     * @param  {Object} a PostCSS Result object
-     * @return {String} ancestor selector
+     * Climb up PostCSS node parent stack
+     * @param  {Object} node            PostCSS node object
+     * @param  {Number} nestingLevel    Number of parent to climb
+     * @return {Object|false}           Parent PostCSS node or false if no matching parent
      */
-    function getParentSelectorAtLevel(nestingLevel, rule, result) {
+    function getParentNodeAtLevel(node, nestingLevel) {
+        var i,
+            currentNode = node;
         nestingLevel = nestingLevel || 1;
 
-        // Set a warning when nestingLevel >= parentsStack.length
-        if ( nestingLevel >= parentsStack.length ) {
-            rule.warn(result, 'Parent selector exceeds current stack.');
+        for (i = 0; i < nestingLevel; i++) {
+            if (currentNode.parent) {
+                currentNode = currentNode.parent;
+            } else {
+                currentNode = false;
+                break;
+            }
         }
-
-        // Create an array of matching parent selectors
-        return parentsStack.filter( function (selector, index) {
-            return index < parentsStack.length - nestingLevel;
-        })
-            .join(' ')
-            .replace(spacesAndAmpersandRegex, '');  // Remove " &"
+        return currentNode;
     }
 
     /**
-     * Given an ancestor placeholder,
-     * returns the corresponding selector fragment.
+     * Given a PostCSS object and the level of a parent rule,
+     * return the selector of the matching parent rule
+     *
+     * @param  {Object} rule            PostCSS Rule object
+     * @param  {Number} nestingLevel    Ancestor nesting depth (0 = &, 1 = ^&, ...)
+     * @param  {Object} result          PostCSS Result object
+     * @return {String}                 Ancestor selector
+     */
+    function getParentSelectorAtLevel(rule, nestingLevel, result) {
+        nestingLevel = nestingLevel || 1;
+
+        // Get parent PostCSS rule object at requested nesting level
+        var parentNodeAtLevel = getParentNodeAtLevel(rule, nestingLevel + 1);
+
+        if (parentNodeAtLevel && parentNodeAtLevel.selectors) {
+            // parentNodeAtLevel.selectors.forEach(function(selector) {
+            //     return resolvedNestedSelector(selector, parentNodeAtLevel)[0];
+            // });
+            return resolvedNestedSelector(parentNodeAtLevel.selector, parentNodeAtLevel)[0];
+        } else {
+            // Set a warning no matching parent node found
+            rule.warn(result, 'Parent selector exceeds current stack.');
+            return '';
+        }
+    }
+
+    /**
+     * Given an ancestor placeholder and the PostCSS node object,
+     * returns the corresponding parent selector fragment
+     * calculated from the provided PostCSS node object.
      * Used as replacer in .replace method
      *
-     * @param  {String} placeholder (eg.^^&)
-     * @param  {Object} a PostCSS Rule object
-     * @param  {Object} a PostCSS Result object
-     * @return {String} string      ancestor selector fragment
+     * @param  {String} placeholder     Ancestor placeholder (eg.^^&)
+     * @param  {Object} rule            PostCSS Rule/Node object
+     * @param  {Object} result          PostCSS Result object
+     * @return {String}                 Ancestor selector
      */
     function placeholderReplacer(placeholder, rule, result) {
         return getParentSelectorAtLevel(
 
             // Get how many level symbols ("^") has current placeholder
-            placeholder.lastIndexOf(opts.levelSymbol) / opts.levelSymbol.length  + 1,
             rule,
+            placeholder.lastIndexOf(opts.levelSymbol) / opts.levelSymbol.length  + 1,
             result
         );
     }
 
     /**
-     * Replace any ancestor placeholder into a given selector/string.
+     * Given a selector string and its PostCSS node object,
+     * return a string rapresenting the provided selector
+     * with ancestor placeholder replaced with actual parent selectors
      *
-     * @param  {String} CSS selector / string
-     * @param  {Object} a PostCSS Rule object
-     * @param  {Object} a PostCSS Result object
+     * @param  {String} selector    CSS selector / string
+     * @param  {Object} rule        a PostCSS Rule/Node object
+     * @param  {Object} result      a PostCSS Result object
      * @return {String} selector
      */
     function replacePlaceholders(selector, rule, result) {
@@ -97,9 +120,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                 // Replace parents placeholders in rule selectors
                 rule.selector = replacePlaceholders(rule.selector, rule, result);
 
-                // Add current selector to current parent stack
-                parentsStack.push(rule.selector);
-
                 // Process child rules
                 process(rule, result);
             }
@@ -111,9 +131,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                 rule.prop = replacePlaceholders(rule.prop, rule, result);
             }
         });
-
-        // Remove current parent stack item at the end of each child iteration
-        parentsStack.pop();
     };
 
     return function (root, result) {
