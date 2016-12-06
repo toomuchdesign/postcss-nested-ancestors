@@ -19,7 +19,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         // Get all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
         placeholderRegex = new RegExp(
             // eslint-disable-next-line max-len
-            '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
+            '([' + escRgx(opts.levelSymbol) + ']+)(' + escRgx(opts.parentSymbol) + ')(.*)',
             'g'
         ),
 
@@ -56,16 +56,16 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * returns the corresponding selector fragment.
      * Used as replacer in .replace method
      *
-     * @param  {String} placeholder (eg.^^&)
+     * @param  {String} levelSymbol (eg.^^)
      * @param  {Object} a PostCSS Rule object
      * @param  {Object} a PostCSS Result object
      * @return {String} string      ancestor selector fragment
      */
-    function placeholderReplacer(placeholder, rule, result) {
+    function placeholderReplacer(levelSymbol, rule, result) {
         return getParentSelectorAtLevel(
 
-            // Get how many level symbols ("^") has current placeholder
-            placeholder.split(opts.levelSymbol).length - 1,
+            // Determine how many level symbols ("^") there are
+            levelSymbol.split(opts.levelSymbol).length - 1,
             rule,
             result
         );
@@ -80,14 +80,18 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @return {String} selector
      */
     function replacePlaceholders(selector, rule, result) {
-
-        // Find placeholders and replace them with matching parent selector
-        return selector.replace(
-            placeholderRegex,
-            function (placeholder) {
-                return placeholderReplacer(placeholder, rule, result);
-            }
-        );
+        return selector.split(/,\s*/).map(function (sel) {
+            return sel.replace(
+                placeholderRegex,
+                function (m, levelSymbol, parentSymbol, end) {
+                    return placeholderReplacer(levelSymbol, rule, result)
+                        .split(/,\s*/)
+                        .map(function (parent) {
+                            return parent + end;
+                        }).join(', ');
+                }
+            );
+        }).join(', ');
     }
 
     var process = function (node, result) {

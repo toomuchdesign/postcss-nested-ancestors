@@ -85,8 +85,8 @@ test('Replace ancestors at different nesting levels', t => {
 
 test('Replace ancestors with 4 different hierarchy levels (1 exceeding)', t => {
     return run( t,
-                '.a{ &-b{ &-c{ &-d{} ^&-d,^&-d{} ^^&-d{} ^^^&-d{} } } }',
-                '.a{ &-b{ &-c{ &-d{} .a-b-d,.a-b-d{} .a-d{} -d{} } } }',
+                '.a{ &-b{ &-c{ &-d{} ^&-d, ^&-d{} ^^&-d{} ^^^&-d{} } } }',
+                '.a{ &-b{ &-c{ &-d{} .a-b-d, .a-b-d{} .a-d{} -d{} } } }',
                 { },
                 1
     );
@@ -133,10 +133,28 @@ test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
     );
 });
 
-test.failing('Complex nesting: ancestors with multiple selectors', t => {
+test('Complex nesting: ancestors with multiple selectors', t => {
     return run( t,
-                '.a,.b{ &:after{ ^&-c{} } }',
-                '.a,.b{ &:after{ .a-c,.b-c{} } }',
+                '.a, .b{ &:after{ ^&-c{} } }',
+                '.a, .b{ &:after{ .a-c, .b-c{} } }',
                 { }
+    );
+});
+
+test('Complex nesting: ancestors with multiple selectors on newlines', t => {
+    return run( t,
+        `.a,
+        .b {
+            &:after {
+                ^&-c,
+                ^&-d {}
+            }
+        }`,
+        `.a, .b {
+            &:after {
+                .a-c, .b-c, .a-d, .b-d {}
+            }
+        }`,
+        { }
     );
 });
