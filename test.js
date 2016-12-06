@@ -1,3 +1,4 @@
+/* eslint-disable max-len*/
 import postcss from 'postcss';
 import test    from 'ava';
 
@@ -100,6 +101,14 @@ test('Process 2 nested ancestors', t => {
     );
 });
 
+test('Process nested ancestors inside to class selectors', t => {
+    return run( t,
+                '.a{ .b{ &:after{ ^&-c{} } } }',
+                '.a{ .b{ &:after{ .a .b-c{} } } }',
+                { }
+    );
+});
+
 test('Process nested ancestor close to > \, + and ~ selectors', t => {
     return run( t,
                 '.a{ &-b{ > ^&-c{} + ^&-d{} ~ ^&-e{} } }',
@@ -133,10 +142,42 @@ test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
     );
 });
 
-test('Complex nesting: ancestors with multiple selectors', t => {
+test('Root ancestor with multiple selectors', t => {
+    return run( t,
+                '.a1,.a2{ .b{ &:after{ ^& .c{} } } }',
+                '.a1,.a2{ .b{ &:after{ .a1 .b .c,.a2 .b .c{} } } }',
+                { }
+    );
+});
+
+test('Root ancestor with multiple selectors + "&" selectors', t => {
     return run( t,
                 '.a1,.a2{ &-b{ &:after{ ^&-c{} } } }',
                 '.a1,.a2{ &-b{ &:after{ .a1-b-c,.a2-b-c{} } } }',
+                { }
+    );
+});
+
+test('Two ancestors with multiple selectors', t => {
+    return run( t,
+                '.a1,.a2{ .b1,.b2{ &:after{ ^& .c{} } } }',
+                '.a1,.a2{ .b1,.b2{ &:after{ .a1 .b1 .c,.a2 .b1 .c,.a1 .b2 .c,.a2 .b2 .c{} } } }',
+                { }
+    );
+});
+
+test('Two ancestors with multiple selectors + "&" selectors', t => {
+    return run( t,
+                '.a1,.a2{ &-b1,&-b2{ &:after{ ^&-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &:after{ .a1-b1-c,.a2-b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                { }
+    );
+});
+
+test('Two ancestors with multiple selectors + half "&" selectors', t => {
+    return run( t,
+                '.a1,.a2{ .b1,&-b2{ &:after{ ^&-c{} } } }',
+                '.a1,.a2{ .b1,&-b2{ &:after{ .a1 .b1-c,.a2 .b1-c,.a1-b2-c,.a2-b2-c{} } } }',
                 { }
     );
 });

@@ -59,8 +59,17 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         // Get parent PostCSS rule object at requested nesting level
         var parentNodeAtLevel = getParentNodeAtLevel(rule, nestingLevel + 1);
 
+        // Iterate each matching parent node selectors and resolve them
         if (parentNodeAtLevel && parentNodeAtLevel.selectors) {
-            return resolvedNestedSelector(parentNodeAtLevel.selector, parentNodeAtLevel);
+            return parentNodeAtLevel.selectors
+                .map(function (selector) {
+                    // Resolve parent selectors for each node
+                    return resolvedNestedSelector(selector, parentNodeAtLevel);
+                })
+                .reduce(function (a, b) {
+                    // Flatten array of arrays
+                    return a.concat(b);
+                });
         } else {
             // Set a warning no matching parent node found
             rule.warn(result, 'Parent selector exceeds current stack.');
