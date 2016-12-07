@@ -48,16 +48,16 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * Given a PostCSS object and the level of a parent rule,
      * return the selector of the matching parent rule
      *
-     * @param  {Object} rule            PostCSS Rule object
+     * @param  {Object} node            PostCSS Node object
      * @param  {Number} nestingLevel    Ancestor nesting depth (0 = &, 1 = ^&, ...)
      * @param  {Object} result          PostCSS Result object
      * @return {Array}                  Array of ancestor selectors
      */
-    function getParentSelectorsAtLevel(rule, nestingLevel, result) {
+    function getParentSelectorsAtLevel(node, nestingLevel, result) {
         nestingLevel = nestingLevel || 1;
 
-        // Get parent PostCSS rule object at requested nesting level
-        var parentNodeAtLevel = getParentNodeAtLevel(rule, nestingLevel + 1);
+        // Get parent PostCSS node object at requested nesting level
+        var parentNodeAtLevel = getParentNodeAtLevel(node, nestingLevel + 1);
 
         // Iterate each matching parent node selectors and resolve them
         if (parentNodeAtLevel && parentNodeAtLevel.selectors) {
@@ -72,7 +72,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                 });
         } else {
             // Set a warning no matching parent node found
-            rule.warn(result, 'Parent selector exceeds current stack.');
+            node.warn(result, 'Parent selector exceeds current stack.');
             return [''];
         }
     }
@@ -83,13 +83,13 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * calculated from the provided PostCSS node object.
      *
      * @param  {String} placeholder     Ancestor placeholder (eg.^^&)
-     * @param  {Object} rule            PostCSS Rule/Node object
+     * @param  {Object} node            PostCSS Node object
      * @param  {Object} result          PostCSS Result object
      * @return {Array}                  Array of ancestor selectors
      */
-    function getMatchingParentSelectors(placeholder, rule, result) {
+    function getMatchingParentSelectors(placeholder, node, result) {
         return getParentSelectorsAtLevel(
-            rule,
+            node,
             // Get how many level symbols ("^") has current placeholder
             placeholder.lastIndexOf(opts.levelSymbol) / opts.levelSymbol.length  + 1,
             result
@@ -101,12 +101,12 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * return a string rapresenting the provided selector
      * with ancestor placeholder replaced with actual parent selectors
      *
-     * @param  {Array} selectors    Array of CSS selector / string
-     * @param  {Object} rule        a PostCSS Rule/Node object
+     * @param  {Array} selectors    Array of CSS selectors / strings
+     * @param  {Object} node        a PostCSS Node object
      * @param  {Object} result      a PostCSS Result object
      * @return {String}             Array of Arrays of CSS selectors
      */
-    function replacePlaceholders(selectors, rule, result) {
+    function replacePlaceholders(selectors, node, result) {
         const resolvedSelectors = selectors.map(function (selector) {
             // Look for an ancestor placeholder into selector (eg. ^^&-foo)
             const placeholder = selector.match(placeholderRegex);
@@ -118,7 +118,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                  * (eg. ['.ancestor-1, '.ancestor-2'])
                  */
                 // eslint-disable-next-line max-len
-                const parentSelectors = getMatchingParentSelectors(placeholder[0], rule, result);
+                const parentSelectors = getMatchingParentSelectors(placeholder[0], node, result);
 
                 /*
                  * For any parent selector found, return a new selector
@@ -132,28 +132,23 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
             return selector;
         });
-
         return resolvedSelectors;
     }
 
     var process = function (node, result) {
-        node.each( function (rule) {
-            if (rule.type === 'rule') {
-
-                // Replace parents placeholders in each rule selector
-                rule.selectors = replacePlaceholders(rule.selectors, rule, result);
-
-                // Process child rules
-                process(rule, result);
-            }
-
-            // Optionally replace parents placeholders into declarations
-            // eslint-disable-next-line brace-style
-            else if (opts.replaceDeclarations && rule.type === 'decl') {
-                rule.values = replacePlaceholders(rule.value, rule, result);
-                rule.props = replacePlaceholders(rule.prop, rule, result);
-            }
+        // Replace parents placeholders in each rule selector
+        node.walkRules( function (rule) {
+            rule.selectors = replacePlaceholders(rule.selectors, rule, result);
         });
+
+        // Replace parents placeholders in each rule declaration value
+        if (opts.replaceDeclarations) {
+            node.walkDecls( function (decl) {
+                decl.value = decl.value.replace(placeholderRegex, function (placeholder) {
+                    return getMatchingParentSelectors(placeholder, decl, result);
+                });
+            });
+        }
     };
 
     return function (root, result) {

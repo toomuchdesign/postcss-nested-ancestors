@@ -60,7 +60,7 @@ test('Replace with nested comment', t => {
     );
 });
 
-test.failing('Replace declaration values if replaceValues is true', t => {
+test('Replace declaration values', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^&"; } } }',
                 '.a{ &:hover { &:before { content: ".a:hover"; } } }',
@@ -68,10 +68,18 @@ test.failing('Replace declaration values if replaceValues is true', t => {
     );
 });
 
-test.failing('Replace declaration values if replaceDeclarations is true', t => {
+test('Replace declaration values', t => {
     return run( t,
-                '.a{ &:hover { &:before { content: "^^&"; } } }',
-                '.a{ &:hover { &:before { content: ".a"; } } }',
+                '.a{ &:hover { &:before { content: "^^&.foo"; } } }',
+                '.a{ &:hover { &:before { content: ".a.foo"; } } }',
+                { replaceDeclarations: true }
+    );
+});
+
+test('Replace declaration values with multiple parent selector', t => {
+    return run( t,
+                '.a1,.a2{ &:hover { &:before { content: "^^&"; } } }',
+                '.a1,.a2{ &:hover { &:before { content: ".a1,.a2"; } } }',
                 { replaceDeclarations: true }
     );
 });
