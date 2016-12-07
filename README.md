@@ -19,7 +19,6 @@ This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-ne
 See [PostCSS] docs for examples for your environment.
 
 ### Ancestor selectors schema
-
 ```
     .level-1 {
 |   |   .level-2 {
@@ -38,7 +37,6 @@ See [PostCSS] docs for examples for your environment.
 ```
 
 ### A real example
-
 ```css
 /* Without postcss-nested-ancestors */
 .MyComponent
@@ -77,46 +75,39 @@ Currently another plugin - [postcss-current-selector] - has tried to solve the p
 **PostCSS Nested ancestors** instead replaces special ancestor selectors, makes no use of variable assignment and produces an output ready to be unwrapped with [postcss-nested].
 
 ## Installation
-
 ```console
 $ npm install postcss-nested-ancestors
 ```
 
 ## Usage
-
 ```js
 postcss([ require('postcss-nested-ancestors') ]);
 ```
 
 ## Options
-
 ### placeholder
-
 Type: `string`
 Default: `^&`
 
 Ancestor selector pattern (utility option to automatically set both `levelSymbol` and `parentSymbol`)
 
 ### levelSymbol
-
 Type: `string`
 Default: `^`
 
 Define ancestor selector fragment reative to the matching nesting level
 
 ### parentSymbol
-
 Type: `string`
 Default: `&`
 
 Ancestor selector base symbol
 
 ### replaceDeclarations (experimental)
-
 Type: `boolean`
 Default: `false`
 
-If this is true then this plugin will look through your declaration values/properties for the placeholder symbol and replace them with specified selector.
+If this is true then this plugin will look through your declaration values for the placeholder symbol and replace them with specified selector.
 
 An use case for this if enabling [postcss-ref](https://github.com/morishitter/postcss-ref) to work with dynamic `@ref` selectors. Read discussion [here](https://github.com/toomuchdesign/postcss-nested-ancestors/pull/3).
 
@@ -139,31 +130,33 @@ An use case for this if enabling [postcss-ref](https://github.com/morishitter/po
 
 ## Known issues
 
-### Complex nesting
-**PostCSS Nested ancestors** is currently not able to resolve complex nesting cases like multiple selector declarations. It might break badly.
+### Replace declaration values in complex nesting scenarios
+`replaceDeclarations` options used in a complex nesting scenario might have undesired outputs because of the different nature of CSS selectors and and declaration values.
 
+In general, avoid to replace declaration values when they are nested in a rule with multiple selectors (but why should you?). In other words don't get yourself into trouble!
+
+Here is an example.
 ```css
-/* Before */
-.foo,
-.bar {
-    &:hover {
-        ^&-moo {
+/* Don't replace declaration value inside multiple selector rules */
+.a1,.a2
+    { &:hover
+        { &:before
+            { content: "^^&";
         }
     }
 }
 
-/* After :-( */
-.foo,
-.bar {
+/* ...that's the output */
+.a1,.a2{
     &:hover {
-        .foo,.bar-moo {
+        &:before {
+            content: ".a1,.a2";
         }
     }
 }
-
 ```
-## Contributing
 
+## Contributing
 Contributions are super welcome, but please follow the conventions below if you want to do a pull request:
 
 - Create a new branch and make the pull request from that branch
@@ -173,4 +166,4 @@ Contributions are super welcome, but please follow the conventions below if you 
 - Update tests (`test.js`) covering new features
 
 ## Todo's
-* Find a smart way to resolve complex nesting issues
+- Write better comments to source code
