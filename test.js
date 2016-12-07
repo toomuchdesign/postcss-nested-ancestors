@@ -44,6 +44,23 @@ test('Prepend 2 ancestors in double selector', t => {
     );
 });
 
+test('Return empty string when pointing to a non-existent ancestor', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ^^^^&-d{} } } }',
+                '.a{ &-b{ &-c{ -d{} } } }',
+                { },
+                1
+    );
+});
+
+test('Process 2 nested ancestor selectors', t => {
+    return run( t,
+                '.a{ &-b{ &-c{ ^^&-d{ &-e{ ^^^^&-f{ } } } } } }',
+                '.a{ &-b{ &-c{ .a-d{ &-e{ .a-f{ } } } } } }',
+                { }
+    );
+});
+
 test('Replace with root comment', t => {
     return run( t,
                 '/* This is a comment */ .a{ &:hover{ ^& .b, ^& .c{} } }',
@@ -60,6 +77,7 @@ test('Replace with nested comment', t => {
     );
 });
 
+// replaceDeclarations option
 test('Replace declaration values', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^&"; } } }',
@@ -101,36 +119,11 @@ test('Replace ancestors with 4 different hierarchy levels (1 exceeding)', t => {
     );
 });
 
-test('Process 2 nested ancestors', t => {
-    return run( t,
-                '.a{ &-b{ &-c{ ^^&-d{ &-e{ ^^^^&-f{ } } } } } }',
-                '.a{ &-b{ &-c{ .a-d{ &-e{ .a-f{ } } } } } }',
-                { }
-    );
-});
-
-test('Process nested ancestors inside to class selectors', t => {
-    return run( t,
-                '.a{ .b{ &:after{ ^&-c{} } } }',
-                '.a{ .b{ &:after{ .a .b-c{} } } }',
-                { }
-    );
-});
-
 test('Process nested ancestor close to > \, + and ~ selectors', t => {
     return run( t,
                 '.a{ &-b{ > ^&-c{} + ^&-d{} ~ ^&-e{} } }',
                 '.a{ &-b{ > .a-c{} + .a-d{} ~ .a-e{} } }',
                 { }
-    );
-});
-
-test('Return empty string when pointing to a non-existent ancestor', t => {
-    return run( t,
-                '.a{ &-b{ &-c{ ^^^^&-d{} } } }',
-                '.a{ &-b{ &-c{ -d{} } } }',
-                { },
-                1
     );
 });
 
@@ -150,42 +143,43 @@ test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
     );
 });
 
-test('Root ancestor with multiple selectors', t => {
+// Complex nesting
+test('Generate comma separated selectors when root element has multiple selectors', t => {
     return run( t,
-                '.a1,.a2{ .b{ &:after{ ^& .c{} } } }',
-                '.a1,.a2{ .b{ &:after{ .a1 .b .c,.a2 .b .c{} } } }',
+                '.a1,.a2{ .b{ &hover{ ^& .c{} } } }',
+                '.a1,.a2{ .b{ &hover{ .a1 .b .c,.a2 .b .c{} } } }',
                 { }
     );
 });
 
-test('Root ancestor with multiple selectors + "&" selectors', t => {
+test('Generate comma separated selectors when root element has multiple selectors + "&" selector', t => {
     return run( t,
-                '.a1,.a2{ &-b{ &:after{ ^&-c{} } } }',
-                '.a1,.a2{ &-b{ &:after{ .a1-b-c,.a2-b-c{} } } }',
+                '.a1,.a2{ &-b{ &hover{ ^&-c{} } } }',
+                '.a1,.a2{ &-b{ &hover{ .a1-b-c,.a2-b-c{} } } }',
                 { }
     );
 });
 
-test('Two ancestors with multiple selectors', t => {
+test('Generate comma separated selectors when two ancestors have multiple selectors', t => {
     return run( t,
-                '.a1,.a2{ .b1,.b2{ &:after{ ^& .c{} } } }',
-                '.a1,.a2{ .b1,.b2{ &:after{ .a1 .b1 .c,.a2 .b1 .c,.a1 .b2 .c,.a2 .b2 .c{} } } }',
+                '.a1,.a2{ .b1,.b2{ &hover{ ^& .c{} } } }',
+                '.a1,.a2{ .b1,.b2{ &hover{ .a1 .b1 .c,.a2 .b1 .c,.a1 .b2 .c,.a2 .b2 .c{} } } }',
                 { }
     );
 });
 
-test('Two ancestors with multiple selectors + "&" selectors', t => {
+test('Generate comma separated selectors when two ancestors have multiple selectors + "&" selectors', t => {
     return run( t,
-                '.a1,.a2{ &-b1,&-b2{ &:after{ ^&-c{} } } }',
-                '.a1,.a2{ &-b1,&-b2{ &:after{ .a1-b1-c,.a2-b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &hover{ ^&-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &hover{ .a1-b1-c,.a2-b1-c,.a1-b2-c,.a2-b2-c{} } } }',
                 { }
     );
 });
 
-test('Two ancestors with multiple selectors + half "&" selectors', t => {
+test('Generate comma separated selectors when two ancestors have multiple selectors + one "&" selector', t => {
     return run( t,
-                '.a1,.a2{ .b1,&-b2{ &:after{ ^&-c{} } } }',
-                '.a1,.a2{ .b1,&-b2{ &:after{ .a1 .b1-c,.a2 .b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                '.a1,.a2{ .b1,&-b2{ &hover{ ^&-c{} } } }',
+                '.a1,.a2{ .b1,&-b2{ &hover{ .a1 .b1-c,.a2 .b1-c,.a1-b2-c,.a2-b2-c{} } } }',
                 { }
     );
 });
