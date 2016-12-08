@@ -15,7 +15,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         parentSymbol: opts.parentSymbol || opts.placeholder.charAt(1)
     }, opts);
 
-    // Get all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
+    // Gets all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
     var placeholderRegex = new RegExp(
             // eslint-disable-next-line max-len
             '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
@@ -105,23 +105,26 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @return {String}             Array of Arrays of CSS selectors
      */
     function replacePlaceholders(selectors, node, result) {
+        // Parse each singular selector
         const resolvedSelectors = selectors.map(function (selector) {
-            // Look for an ancestor placeholder into selector (eg. ^^&-foo)
+
+            // Look for ancestor placeholders into selector (eg. ^^&-foo)
             const placeholder = selector.match(placeholderRegex);
 
-            // Ancestor placeholder found (eg. ^^&):
+            // Ancestor placeholder found! (eg. ^^&):
             if (placeholder) {
                 /*
-                 * Get the array of parent selectors matching current placeholder
+                 * Get an array of parent selectors build from found placeholder
                  * (eg. ['.ancestor-1, '.ancestor-2'])
                  */
                 // eslint-disable-next-line max-len
                 const parentSelectors = getMatchingParentSelectors(placeholder[0], node, result);
 
                 /*
-                 * For any parent selector found, return a new selector
-                 * by merging current selector and matching parent selectors
-                 * (eg. ['.ancestor-1-foo, '.ancestor-2-foo'])
+                 * Replace original selector string with an array of updated selectors.
+                 * The ancestor placeholder (^^&) found in original selector (^^&-foo)
+                 * is replaced by just generated parent selectors.
+                 * (eg. '^^&-foo' --> ['.ancestor-1-foo, '.ancestor-2-foo'])
                  */
                 return parentSelectors.map(function (parentSelector) {
                     return selector.replace(placeholder[0], parentSelector);
@@ -143,6 +146,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         if (opts.replaceDeclarations) {
             node.walkDecls( function (decl) {
                 decl.value = decl.value.replace(placeholderRegex, function (placeholder) {
+                    // Get parent selectors array and join it as a comma separated string
                     return getMatchingParentSelectors(placeholder, decl, result);
                 });
             });
