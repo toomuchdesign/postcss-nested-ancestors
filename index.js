@@ -29,16 +29,14 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * @return {Object|false}           Parent PostCSS node or false if no matching parent
      */
     function getParentNodeAtLevel(node, nestingLevel) {
-        var i,
-            currentNode = node;
+        var currentNode = node;
         nestingLevel = nestingLevel || 1;
 
-        for (i = 0; i < nestingLevel; i++) {
-            if (currentNode.parent) {
-                currentNode = currentNode.parent;
+        for (var i = 0; i < nestingLevel; i++) {
+            if (currentNode.parent.type === 'root') {
+                return false;
             } else {
-                currentNode = false;
-                break;
+                currentNode = currentNode.parent;
             }
         }
         return currentNode;
