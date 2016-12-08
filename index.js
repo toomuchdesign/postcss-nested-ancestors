@@ -102,7 +102,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
      * In case of multiple parent selectors, the returning selectors array will
      * contain more items then the original one.
      *
-     * @param  {Array} selectors    Array of CSS selectors / strings
      * @param  {Object} node        a PostCSS Node object
      * @param  {Object} result      a PostCSS Result object
      * @return {String}             Array of Arrays of CSS selectors
