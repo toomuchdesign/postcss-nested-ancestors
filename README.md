@@ -14,7 +14,7 @@ When writing modular nested CSS, `&` current parent selector is often not enough
 
 **PostCSS Nested ancestors** introduces `^&` selector which let you reference **any parent ancestor selector** with an easy and customizable interface.
 
-This plugin should be used **before** a POSTCSS rules unwrapper like [postcss-nested].
+This plugin should be used **before** a PostCSS rules unwrapper like [postcss-nested].
 
 See [PostCSS] docs for examples for your environment.
 
@@ -133,9 +133,9 @@ An use case for this if enabling [postcss-ref](https://github.com/morishitter/po
 ### Replace declaration values in complex nesting scenarios
 `replaceDeclarations` options used in a complex nesting scenario might have undesired outputs because of the different nature of CSS selectors and and declaration values.
 
-In general, avoid to replace declaration values when they are nested in a rule with multiple selectors (but why should you?). In other words don't get yourself into trouble!
+In general, avoid replacing declaration values when inside a rule with multiple selectors (but why should you?). In other words don't get yourself into trouble!
 
-Here is an example.
+Here is an example of what you don't want to do.
 ```css
 /* Don't replace declaration value inside multiple selector rules */
 .a1,.a2
