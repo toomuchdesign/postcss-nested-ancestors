@@ -28,6 +28,14 @@ test('Prepend ancestor in a simple case', t => {
     );
 });
 
+test('Replace ancestor selectors in sibling rules', t => {
+    return run( t,
+                '.a{ &:hover{ ^&-b1{} ^&-b2{} ^& .b3{} } }',
+                '.a{ &:hover{ .a-b1{} .a-b2{} .a .b3{} } }',
+                { }
+    );
+});
+
 test('Chain 2 ancestors in double selector', t => {
     return run( t,
                 '.a{ &:hover{ ^&-b, ^&-c{} } }',
@@ -146,40 +154,73 @@ test('Replace default ancestor with custom levelSymbol and parentSymbol', t => {
 // Complex nesting
 test('Generate comma separated selectors when root element has multiple selectors', t => {
     return run( t,
-                '.a1,.a2{ .b{ &hover{ ^& .c{} } } }',
-                '.a1,.a2{ .b{ &hover{ .a1 .b .c,.a2 .b .c{} } } }',
+                '.a1,.a2{ .b{ &:hover{ ^& .c{} } } }',
+                '.a1,.a2{ .b{ &:hover{ .a1 .b .c,.a2 .b .c{} } } }',
                 { }
     );
 });
 
 test('Generate comma separated selectors when root element has multiple selectors + "&" selector', t => {
     return run( t,
-                '.a1,.a2{ &-b{ &hover{ ^&-c{} } } }',
-                '.a1,.a2{ &-b{ &hover{ .a1-b-c,.a2-b-c{} } } }',
+                '.a1,.a2{ &-b{ &:hover{ ^&-c{} } } }',
+                '.a1,.a2{ &-b{ &:hover{ .a1-b-c,.a2-b-c{} } } }',
                 { }
     );
 });
 
 test('Generate comma separated selectors when two ancestors have multiple selectors', t => {
     return run( t,
-                '.a1,.a2{ .b1,.b2{ &hover{ ^& .c{} } } }',
-                '.a1,.a2{ .b1,.b2{ &hover{ .a1 .b1 .c,.a2 .b1 .c,.a1 .b2 .c,.a2 .b2 .c{} } } }',
+                '.a1,.a2{ .b1,.b2{ &:hover{ ^& .c{} } } }',
+                '.a1,.a2{ .b1,.b2{ &:hover{ .a1 .b1 .c,.a2 .b1 .c,.a1 .b2 .c,.a2 .b2 .c{} } } }',
                 { }
     );
 });
 
 test('Generate comma separated selectors when two ancestors have multiple selectors + "&" selectors', t => {
     return run( t,
-                '.a1,.a2{ &-b1,&-b2{ &hover{ ^&-c{} } } }',
-                '.a1,.a2{ &-b1,&-b2{ &hover{ .a1-b1-c,.a2-b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &:hover{ ^&-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &:hover{ .a1-b1-c,.a2-b1-c,.a1-b2-c,.a2-b2-c{} } } }',
                 { }
     );
 });
 
 test('Generate comma separated selectors when two ancestors have multiple selectors + one "&" selector', t => {
     return run( t,
-                '.a1,.a2{ .b1,&-b2{ &hover{ ^&-c{} } } }',
-                '.a1,.a2{ .b1,&-b2{ &hover{ .a1 .b1-c,.a2 .b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                '.a1,.a2{ .b1,&-b2{ &:hover{ ^&-c{} } } }',
+                '.a1,.a2{ .b1,&-b2{ &:hover{ .a1 .b1-c,.a2 .b1-c,.a1-b2-c,.a2-b2-c{} } } }',
+                { }
+    );
+});
+
+// Ancestor selector repeated in same rule
+test('Use same ancestor selector twice in same rule', t => {
+    return run( t,
+                '.a{ &:hover{ ^&^& .b{} ^&^&-b{} } }',
+                '.a{ &:hover{ .a.a .b{} .a.a-b{} } }',
+                { }
+    );
+});
+
+test('Use same ancestor selector twice in same rule inside multiple selector rule', t => {
+    return run( t,
+                '.a1,.a2{ &:hover{ ^&^&-b{} } }',
+                '.a1,.a2{ &:hover{ .a1.a1-b,.a2.a2-b{} } }',
+                { }
+    );
+});
+
+test('Use same ancestor selector twice in same rule inside multiple selector rule', t => {
+    return run( t,
+                '.a1,.a2{ &-b1,&-b2{ &:hover{ ^&^&-c{} } } }',
+                '.a1,.a2{ &-b1,&-b2{ &:hover{ .a1-b1.a1-b1-c,.a2-b1.a2-b1-c,.a1-b2.a1-b2-c,.a2-b2.a2-b2-c{} } } }',
+                { }
+    );
+});
+
+test('Use two different ancestor selectors in same rule', t => {
+    return run( t,
+                '.a{ .b{ &:hover{ ^&^^& .c{} } } }',
+                '.a{ .b{ &:hover{ .a .b.a .c{} } } }',
                 { }
     );
 });
