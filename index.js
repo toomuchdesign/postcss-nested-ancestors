@@ -95,18 +95,21 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     }
 
     /**
-     * Given a selector string and its PostCSS node object,
-     * return a string rapresenting the provided selector
-     * with ancestor placeholder replaced with actual parent selectors
+     * Given a PostCSS node object,
+     * generate an array of selector from provided PostCSS node selectors
+     * in which ancestor placeholders are replaced with actual matching parent selectors.
+     *
+     * In case of multiple parent selectors, the returning selectors array will
+     * contain more items then the original one.
      *
      * @param  {Array} selectors    Array of CSS selectors / strings
      * @param  {Object} node        a PostCSS Node object
      * @param  {Object} result      a PostCSS Result object
      * @return {String}             Array of Arrays of CSS selectors
      */
-    function replacePlaceholders(selectors, node, result) {
+    function getReplacedSelectors(node, result) {
         // Parse each singular selector
-        const resolvedSelectors = selectors.map(function (selector) {
+        const resolvedSelectors = node.selectors.map(function (selector) {
 
             // Look for ancestor placeholders into selector (eg. ^^&-foo)
             const placeholder = selector.match(placeholderRegex);
@@ -139,7 +142,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     var process = function (node, result) {
         // Replace parents placeholders in each rule selector
         node.walkRules( function (rule) {
-            rule.selectors = replacePlaceholders(rule.selectors, rule, result);
+            rule.selectors = getReplacedSelectors(rule, result);
         });
 
         // Replace parents placeholders in each rule declaration value
