@@ -147,7 +147,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
             node.walkDecls( function (decl) {
                 decl.value = decl.value.replace(placeholderRegex, function (placeholder) {
                     // Get parent selectors array and join it as a comma separated string
-                    return getMatchingParentSelectors(placeholder, decl, result);
+                    return getMatchingParentSelectors(placeholder, decl, result).join();
                 });
             });
         }
