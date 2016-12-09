@@ -111,16 +111,34 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         const resolvedSelectors = node.selectors.map(function (selector) {
 
             // Look for ancestor placeholders into selector (eg. ^^&-foo)
-            const placeholder = selector.match(placeholderRegex);
+            const placeholders = selector.match(placeholderRegex);
 
             // Ancestor placeholder found! (eg. ^^&):
-            if (placeholder) {
+            if (placeholders) {
+
+                /*
+                 * Warning!
+                 * If more than one ancestor placeholder found (placeholders.length > 1)
+                 * in the same selector, all placeholders will be processed like
+                 * they were equal to the first one. (eg. '^&^^&' --> '^&^&').
+                 *
+                 * It is to avoid useless complexity in a scenario which can be handled
+                 * by splitting the selector in 2 nested selectors.
+                 * (eg. '^&^^&' --> '^&{ &^^^&{}'). mmh? ;-)
+                 *
+                 */
+                if (placeholders.length > 1) {
+                    // eslint-disable-next-line max-len
+                    node.warn(result, 'More then one ancestor placeholders found in same selector.');
+                }
                 /*
                  * Get an array of parent selectors build from found placeholder
                  * (eg. ['.ancestor-1, '.ancestor-2'])
+                 *
+                 * See the following "placeholders[0]""
                  */
                 // eslint-disable-next-line max-len
-                const parentSelectors = getMatchingParentSelectors(placeholder[0], node, result);
+                const parentSelectors = getMatchingParentSelectors(placeholders[0], node, result);
 
                 /*
                  * Replace original selector string with an array of updated selectors.
@@ -129,12 +147,13 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                  * (eg. '^^&-foo' --> ['.ancestor-1-foo, '.ancestor-2-foo'])
                  */
                 return parentSelectors.map(function (parentSelector) {
-                    return selector.replace(placeholder[0], parentSelector);
+                    return selector.replace(placeholderRegex, parentSelector);
                 });
             }
-
+            // No ancestor placeholders found! Return original selector
             return selector;
         });
+
         return resolvedSelectors;
     }
 

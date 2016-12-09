@@ -197,7 +197,8 @@ test('Use same ancestor selector twice in same rule', t => {
     return run( t,
                 '.a{ &:hover{ ^&^& .b{} ^&^&-b{} } }',
                 '.a{ &:hover{ .a.a .b{} .a.a-b{} } }',
-                { }
+                { },
+                2
     );
 });
 
@@ -205,7 +206,8 @@ test('Use same ancestor selector twice in same rule inside multiple selector rul
     return run( t,
                 '.a1,.a2{ &:hover{ ^&^&-b{} } }',
                 '.a1,.a2{ &:hover{ .a1.a1-b,.a2.a2-b{} } }',
-                { }
+                { },
+                1
     );
 });
 
@@ -213,14 +215,24 @@ test('Use same ancestor selector twice in same rule inside multiple selector rul
     return run( t,
                 '.a1,.a2{ &-b1,&-b2{ &:hover{ ^&^&-c{} } } }',
                 '.a1,.a2{ &-b1,&-b2{ &:hover{ .a1-b1.a1-b1-c,.a2-b1.a2-b1-c,.a1-b2.a1-b2-c,.a2-b2.a2-b2-c{} } } }',
-                { }
+                { },
+                1
     );
 });
 
-test('Use two different ancestor selectors in same rule', t => {
+test.failing('Use two different ancestor placeholders in same rule', t => {
     return run( t,
-                '.a{ .b{ &:hover{ ^&^^& .c{} } } }',
-                '.a{ .b{ &:hover{ .a .b.a .c{} } } }',
+                '.a{ &-b{ &:hover{ ^&^^&-c{} } } }',
+                '.a{ &-b{ &:hover{ .a-b.a-c{} } } }',
+                { },
+                1
+    );
+});
+
+test('Alternative to having two different ancestor placeholders in same rule', t => {
+    return run( t,
+                '.a{ &-b{ &:hover{ ^& { &^^^&-c{} } } } }',
+                '.a{ &-b{ &:hover{ .a-b { &.a-c{} } } } }',
                 { }
     );
 });
