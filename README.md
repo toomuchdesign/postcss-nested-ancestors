@@ -219,9 +219,9 @@ Contributions are super welcome, but please follow the conventions below if you 
 
 - Create a new branch and make the pull request from that branch
 - Each pull request for a single feature or bug fix
-- If you are planning on doing something big, please discuss first with [@toomuchdesign](www.github.com/toomuchdesign) about it
+- If you are planning on doing something big, please discuss first with [@toomuchdesign](http://www.twitter.com/toomuchdesign) about it
 - Follow current code formatting
 - Update tests (`test.js`) covering new features
 
 ## Todo's
-- Write better comments to source code
+- Better comment source code
