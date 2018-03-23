@@ -23,20 +23,39 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         );
 
     /**
-     * Climb up PostCSS node parent stack
+     * Get first parent rule node (no @-rules)
+     * @param  {Object} node            PostCSS node object
+     * @return {Object|false}           Parent node or false if no parent rule found
+     */
+    function getParentRule(node) {
+        var parentNode = node.parent;
+
+        if (parentNode.type === 'rule') {
+            return parentNode;
+        }
+
+        if (parentNode.type === 'root') {
+            return false;
+        }
+
+        return getParentRule(parentNode);
+    }
+
+    /**
+     * Climb up PostCSS node parent stack (no @-rules)
      * @param  {Object} node            PostCSS node object
      * @param  {Number} nestingLevel    Number of parent to climb
-     * @return {Object|false}           Parent PostCSS node or false if no matching parent
+     * @return {Object|false}           Parent node or false if no matching parent
      */
-    function getParentNodeAtLevel(node, nestingLevel) {
+    function getParentRuleAtLevel(node, nestingLevel) {
         var currentNode = node;
         nestingLevel = nestingLevel || 1;
 
         for (var i = 0; i < nestingLevel; i++) {
-            if (currentNode.parent.type === 'root') {
+            currentNode = getParentRule(currentNode);
+
+            if (!currentNode) {
                 return false;
-            } else {
-                currentNode = currentNode.parent;
             }
         }
         return currentNode;
@@ -55,7 +74,7 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
         nestingLevel = nestingLevel || 1;
 
         // Get parent PostCSS node object at requested nesting level
-        var parentNodeAtLevel = getParentNodeAtLevel(node, nestingLevel + 1);
+        var parentNodeAtLevel = getParentRuleAtLevel(node, nestingLevel + 1);
 
         // Iterate each matching parent node selectors and resolve them
         if (parentNodeAtLevel && parentNodeAtLevel.selectors) {
