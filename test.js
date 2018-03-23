@@ -192,6 +192,14 @@ test('Generate comma separated selectors when two ancestors have multiple select
     );
 });
 
+test('Do not consider media queries when building ancestor selectors', t => {
+    return run( t,
+                    '.a{ &-b{ &-c{ @media (max-width: 320px){ ^&-d{} &-d{} } } } }',
+                    '.a{ &-b{ &-c{ @media (max-width: 320px){ .a-b-d{} &-d{} } } } }',
+                { }
+    );
+});
+
 // Ancestor selector repeated in same rule
 test('Use same ancestor selector twice in same rule', t => {
     return run( t,
