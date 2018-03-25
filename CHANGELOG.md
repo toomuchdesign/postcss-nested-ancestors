@@ -1,3 +1,6 @@
+## 2.0.0
+- Consider `rule` nodes only when when building ancestor selectors
+
 ## 1.0.0
 - Solve complex nesting scenarios scenarios externalizing parent selectors resolution to [postcss-resolve-nested-selector](https://github.com/davidtheclark/)
 - Refactor bootstrap function using `walkRules` and `walkDecls` PostCSS methods
