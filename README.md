@@ -1,6 +1,6 @@
 # PostCSS Nested ancestors [![Build Status][ci-img]][ci]
 
-[PostCSS] plugin to reference any ancestor selector in nested CSS.
+[PostCSS] plugin to reference any parent ancestor selector in nested CSS.
 
 [PostCSS]:                      https://github.com/postcss/postcss
 [ci-img]:                       https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg
