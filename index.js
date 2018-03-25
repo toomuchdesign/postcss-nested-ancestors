@@ -1,16 +1,15 @@
-var postcss = require('postcss'),
-    resolvedNestedSelector = require('postcss-resolve-nested-selector'),
-    assign = require('object-assign'),
-    escRgx = require('escape-string-regexp');
+var postcss = require('postcss');
+var resolvedNestedSelector = require('postcss-resolve-nested-selector');
+var escRgx = require('escape-string-regexp');
 
 module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
-    opts = assign({
+    opts = Object.assign({
         placeholder: '^&',
         replaceDeclarations: false
     }, opts);
 
     // Advanced options
-    opts = assign({
+    opts = Object.assign({
         levelSymbol: opts.levelSymbol || opts.placeholder.charAt(0),
         parentSymbol: opts.parentSymbol || opts.placeholder.charAt(1)
     }, opts);

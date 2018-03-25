@@ -2,6 +2,9 @@
   "name": "postcss-nested-ancestors",
   "version": "1.0.0",
   "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "keywords": [
     "postcss",
     "css",
@@ -20,8 +23,7 @@
   "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
-    "object-assign": "^4.1.0",
-    "postcss": "^5.0.21",
+    "postcss": "^6.0.0",
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
