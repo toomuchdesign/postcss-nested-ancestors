@@ -29,7 +29,7 @@
   "devDependencies": {
     "ava": "^0.16.0",
     "eslint": "^2.10.0",
-    "eslint-config-postcss": "^2.0.2"
+    "eslint-config-postcss": "^3.0.0"
   },
   "scripts": {
     "test": "npm run tests && npm run lint",
