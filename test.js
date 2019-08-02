@@ -86,7 +86,7 @@ test('Replace with nested comment', t => {
 });
 
 // replaceDeclarations option
-test('Replace declaration values', t => {
+test('Replace declaration values (I)', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^&"; } } }',
                 '.a{ &:hover { &:before { content: ".a:hover"; } } }',
@@ -94,7 +94,7 @@ test('Replace declaration values', t => {
     );
 });
 
-test('Replace declaration values', t => {
+test('Replace declaration values (II)', t => {
     return run( t,
                 '.a{ &:hover { &:before { content: "^^&.foo"; } } }',
                 '.a{ &:hover { &:before { content: ".a.foo"; } } }',
@@ -210,7 +210,7 @@ test('Use same ancestor selector twice in same rule', t => {
     );
 });
 
-test('Use same ancestor selector twice in same rule inside multiple selector rule', t => {
+test('Use same ancestor selector twice in same rule inside multiple selector rule (I)', t => {
     return run( t,
                 '.a1,.a2{ &:hover{ ^&^&-b{} } }',
                 '.a1,.a2{ &:hover{ .a1.a1-b,.a2.a2-b{} } }',
@@ -219,7 +219,7 @@ test('Use same ancestor selector twice in same rule inside multiple selector rul
     );
 });
 
-test('Use same ancestor selector twice in same rule inside multiple selector rule', t => {
+test('Use same ancestor selector twice in same rule inside multiple selector rule (II)', t => {
     return run( t,
                 '.a1,.a2{ &-b1,&-b2{ &:hover{ ^&^&-c{} } } }',
                 '.a1,.a2{ &-b1,&-b2{ &:hover{ .a1-b1.a1-b1-c,.a2-b1.a2-b1-c,.a1-b2.a1-b2-c,.a2-b2.a2-b2-c{} } } }',
