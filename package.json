@@ -27,25 +27,12 @@
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
-    "ava": "^2.0.0",
-    "eslint": "^2.10.0",
-    "eslint-config-postcss": "^2.0.2"
+    "ava": "^2.0.0"
   },
   "scripts": {
-    "test": "npm run tests && npm run lint",
-    "tests": "ava",
-    "lint": "eslint *.js",
+    "test": "ava",
     "preversion": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags"
-  },
-  "eslintConfig": {
-    "extends": "eslint-config-postcss/es5",
-    "rules": {
-      "max-len": [
-        "error",
-        90
-      ]
-    }
   }
 }

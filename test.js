@@ -1,4 +1,3 @@
-/* eslint-disable max-len*/
 import postcss from 'postcss';
 import test    from 'ava';
 

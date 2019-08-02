@@ -16,7 +16,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
 
     // Gets all ancestors placeholder recurrencies: ^&, ^^&, ^^^&, [...]
     var placeholderRegex = new RegExp(
-            // eslint-disable-next-line max-len
             '(' + escRgx(opts.levelSymbol) + ')+(' + escRgx(opts.parentSymbol) + ')',
             'g'
         );
@@ -146,7 +145,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                  *
                  */
                 if (placeholders.length > 1) {
-                    // eslint-disable-next-line max-len
                     node.warn(result, 'More then one ancestor placeholders found in same selector.');
                 }
                 /*
@@ -155,7 +153,6 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
                  *
                  * See the following "placeholders[0]""
                  */
-                // eslint-disable-next-line max-len
                 const parentSelectors = getMatchingParentSelectors(placeholders[0], node, result);
 
                 /*
