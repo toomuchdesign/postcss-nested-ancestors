@@ -3,6 +3,7 @@
   "schedule": "every weekend",
   "rangeStrategy": "bump",
   "automerge": true,
+  "automergeType": "branch",
   "stabilityDays": 3,
   "major": {
     "automerge": false
