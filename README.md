@@ -220,8 +220,8 @@ Contributions are super welcome, but please follow the conventions below if you 
 - Better comment source code
 
 [PostCSS]:                      https://github.com/postcss/postcss
-[ci-badge]:                     https://travis-ci.org/toomuchdesign/re-reselect.svg?branch=master
-[ci]:                           https://travis-ci.org/toomuchdesign/re-reselect
+[ci-badge]:                     https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg?branch=master
+[ci]:                           https://travis-ci.org/toomuchdesign/postcss-nested-ancestors
 [postcss-current-selector]:     https://github.com/komlev/postcss-current-selector
 [postcss-nested]:               https://github.com/postcss/postcss-nested
 [postcss-simple-vars]:          https://github.com/postcss/postcss-simple-vars
