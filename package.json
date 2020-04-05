@@ -27,7 +27,7 @@
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
-    "ava": "^3.5.2"
+    "ava": "^3.6.0"
   },
   "scripts": {
     "test": "ava",
