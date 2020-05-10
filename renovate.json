@@ -1,6 +1,6 @@
 {
   "extends": ["config:base"],
-  "schedule": "every weekend",
+  "schedule": "every month",
   "rangeStrategy": "bump",
   "automerge": true,
   "automergeType": "branch",
