@@ -23,11 +23,14 @@
   "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
   "dependencies": {
     "escape-string-regexp": "^2.0.0",
-    "postcss": "^8.0.0",
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
-    "ava": "^3.15.0"
+    "ava": "^3.15.0",
+    "postcss": "^8.3.5"
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
   },
   "scripts": {
     "test": "ava",
