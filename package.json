@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
-    "postcss": "^8.3.5"
+    "postcss": "^8.3.5",
+    "prettier": "^2.3.2"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
@@ -36,6 +37,8 @@
     "test": "ava",
     "prepare": "npm test",
     "version": "git add package.json",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "prettier:fix": "prettier --write .",
+    "prettier:check": "prettier --check ."
   }
 }

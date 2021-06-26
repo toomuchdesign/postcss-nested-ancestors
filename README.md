@@ -118,9 +118,9 @@ An use case for this if enabling [postcss-ref](https://github.com/morishitter/po
 ```css
 /* Before */
 .foo {
-    &:last-child {
-        border-top: ref(^&, border-bottom);
-    }
+  &:last-child {
+    border-top: ref(^&, border-bottom);
+  }
 }
 
 /* After PostCSS Nested ancestors and PostCSS Nested */
@@ -128,7 +128,7 @@ An use case for this if enabling [postcss-ref](https://github.com/morishitter/po
 }
 
 .foo:last-child {
-    border-top: ref(.foo, border-bottom);
+  border-top: ref(.foo, border-bottom);
 }
 ```
 
@@ -147,18 +147,18 @@ In general, **do not use more than one ancestor placeholder in a single rule sel
 ```css
 /* 2 equal ancestor placeholders in single rule selector */
 .a {
-    &:hover {
-        ^&^&-b {
-        }
+  &:hover {
+    ^&^&-b {
     }
+  }
 }
 
 /* Output: It works but casts a warning */
 .a {
-    &:hover {
-        .a.a-b {
-        }
+  &:hover {
+    .a.a-b {
     }
+  }
 }
 ```
 
@@ -167,36 +167,36 @@ In general, **do not use more than one ancestor placeholder in a single rule sel
 ```css
 /* 2 different ancestor placeholders in single rule selector */
 .a {
-    &-b {
-        &:hover {
-            /* Will be processed as ^&^&-c{}, sorry! */
-            ^&^^&-c {
-            }
-        }
+  &-b {
+    &:hover {
+      /* Will be processed as ^&^&-c{}, sorry! */
+      ^&^^&-c {
+      }
     }
+  }
 }
 
 /* Wrong output: All placeholder replaced with the value of the first one */
 .a {
-    &-b {
-        &:hover {
-            /* Expected output: .a-b.a-c{}*/
-            .a-b.a-b-c {
-            }
-        }
+  &-b {
+    &:hover {
+      /* Expected output: .a-b.a-c{}*/
+      .a-b.a-b-c {
+      }
     }
+  }
 }
 
 /* This use case can be rewritten as: */
 .a {
-    &-b {
-        &:hover {
-            ^& {
-                &^^^&-c {
-                }
-            }
+  &-b {
+    &:hover {
+      ^& {
+        &^^^&-c {
         }
+      }
     }
+  }
 }
 ```
 
@@ -212,21 +212,21 @@ Here is an example of what you don't want to do.
 /* Don't replace declaration value inside multiple selector rules */
 .a1,
 .a2 {
-    &:hover {
-        &:before {
-            content: '^^&';
-        }
+  &:hover {
+    &:before {
+      content: '^^&';
     }
+  }
 }
 
 /* Output */
 .a1,
 .a2 {
-    &:hover {
-        &:before {
-            content: '.a1,.a2';
-        }
+  &:hover {
+    &:before {
+      content: '.a1,.a2';
     }
+  }
 }
 ```
 
@@ -234,15 +234,15 @@ Here is an example of what you don't want to do.
 
 Contributions are super welcome, but please follow the conventions below if you want to do a pull request:
 
--   Create a new branch and make the pull request from that branch
--   Each pull request for a single feature or bug fix
--   If you are planning on doing something big, please discuss first with [@toomuchdesign](http://www.twitter.com/toomuchdesign) about it
--   Follow current code formatting
--   Update tests (`test.js`) covering new features
+- Create a new branch and make the pull request from that branch
+- Each pull request for a single feature or bug fix
+- If you are planning on doing something big, please discuss first with [@toomuchdesign](http://www.twitter.com/toomuchdesign) about it
+- Follow current code formatting
+- Update tests (`test.js`) covering new features
 
 ## Todo's
 
--   Better comment source code
+- Better comment source code
 
 [postcss]: https://github.com/postcss/postcss
 [ci-badge]: https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg?branch=master
