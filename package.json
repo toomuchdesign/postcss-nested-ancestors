@@ -5,6 +5,9 @@
   "engines": {
     "node": ">=10"
   },
+  "files": [
+    "index.js"
+  ],
   "keywords": [
     "postcss",
     "css",
