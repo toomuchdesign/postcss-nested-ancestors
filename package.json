@@ -29,10 +29,10 @@
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
-    "ava": "^3.15.0",
+    "ava": "^4.2.0",
     "nyc": "^15.1.0",
-    "postcss": "^8.3.5",
-    "prettier": "^2.3.2"
+    "postcss": "^8.4.13",
+    "prettier": "^2.6.2"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
