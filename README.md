@@ -1,4 +1,8 @@
-# PostCSS Nested ancestors [![Build Status][ci-badge]][ci]
+# PostCSS Nested ancestors
+
+[![Build status][ci-badge]][ci]
+[![Npm version][npm-version-badge]][npm]
+[![Test coverage report][coveralls-badge]][coveralls]
 
 [PostCSS] plugin to reference any parent ancestor selector in nested CSS.
 
@@ -237,7 +241,6 @@ Contributions are super welcome, but please follow the conventions below if you 
 - Create a new branch and make the pull request from that branch
 - Each pull request for a single feature or bug fix
 - If you are planning on doing something big, please discuss first with [@toomuchdesign](http://www.twitter.com/toomuchdesign) about it
-- Follow current code formatting
 - Update tests (`test.js`) covering new features
 
 ## Todo's
@@ -245,8 +248,12 @@ Contributions are super welcome, but please follow the conventions below if you 
 - Better comment source code
 
 [postcss]: https://github.com/postcss/postcss
-[ci-badge]: https://travis-ci.org/toomuchdesign/postcss-nested-ancestors.svg?branch=master
-[ci]: https://travis-ci.org/toomuchdesign/postcss-nested-ancestors
+[ci-badge]: https://github.com/toomuchdesign/postcss-nested-ancestors/actions/workflows/ci.yml/badge.svg
+[ci]: https://github.com/toomuchdesign/postcss-nested-ancestors/actions/workflows/ci.yml
+[coveralls-badge]: https://coveralls.io/repos/github/toomuchdesign/postcss-nested-ancestors/badge.svg?branch=master
+[coveralls]: https://coveralls.io/github/toomuchdesign/postcss-nested-ancestors?branch=master
+[npm]: https://www.npmjs.com/package/postcss-nested-ancestors
+[npm-version-badge]: https://img.shields.io/npm/v/postcss-nested-ancestors.svg
 [postcss-current-selector]: https://github.com/komlev/postcss-current-selector
 [postcss-nested]: https://github.com/postcss/postcss-nested
 [postcss-simple-vars]: https://github.com/postcss/postcss-simple-vars
