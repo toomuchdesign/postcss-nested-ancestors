@@ -39,7 +39,7 @@
   },
   "scripts": {
     "test": "nyc --reporter=lcov ava",
-    "prepare": "npm test",
+    "prepare": "npm run prettier:check && npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags",
     "prettier:fix": "prettier --write .",
