@@ -1,3 +1,8 @@
+## 3.0.0
+
+- Use `PostCSS` 8
+- Node supported version >=12
+
 ## 2.0.0
 
 - Consider `rule` nodes only when when building ancestor selectors
