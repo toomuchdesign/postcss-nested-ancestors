@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
+    "nyc": "^15.1.0",
     "postcss": "^8.3.5",
     "prettier": "^2.3.2"
   },
@@ -34,7 +35,7 @@
     "postcss": "^8.0.0"
   },
   "scripts": {
-    "test": "ava",
+    "test": "nyc --reporter=lcov ava",
     "prepare": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags",
