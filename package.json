@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "files": [
     "index.js"
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/toomuchdesign/postcss-nested-ancestors",
   "dependencies": {
-    "escape-string-regexp": "^4.0.0",
+    "escape-string-regexp": "^5.0.0",
     "postcss-resolve-nested-selector": "^0.1.1"
   },
   "devDependencies": {
