@@ -1,8 +1,10 @@
-var postcss = require('postcss');
 var resolvedNestedSelector = require('postcss-resolve-nested-selector');
 var escRgx = require('escape-string-regexp');
 
-module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
+/**
+ * @type {import('postcss').PluginCreator}
+ */
+module.exports = (opts = {}) => {
   opts = Object.assign(
     {
       placeholder: '^&',
@@ -203,7 +205,12 @@ module.exports = postcss.plugin('postcss-nested-ancestors', function (opts) {
     }
   };
 
-  return function (root, result) {
-    process(root, result);
+  return {
+    postcssPlugin: 'postcss-nested-ancestors',
+    Once(root, { result }) {
+      process(root, result);
+    },
   };
-});
+};
+
+module.exports.postcss = true;
