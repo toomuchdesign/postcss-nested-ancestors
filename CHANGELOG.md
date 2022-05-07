@@ -1,5 +1,7 @@
 ## 3.0.0
 
+Breaking Changes
+
 - Use `PostCSS` 8
 - Node supported version >=12
 
