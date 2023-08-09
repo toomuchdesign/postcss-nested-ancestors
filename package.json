@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "PostCSS plugin to reference any ancestor selector in nested CSS",
   "engines": {
-    "node": ">=v16.18.0"
+    "node": ">=v16.20.1"
   },
   "files": [
     "index.js"
