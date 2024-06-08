@@ -32,7 +32,7 @@
     "ava": "^4.3.3",
     "nyc": "^15.1.0",
     "postcss": "^8.4.13",
-    "prettier": "^2.8.8"
+    "prettier": "^3.3.1"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
